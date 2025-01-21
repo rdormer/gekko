@@ -1,0 +1,41 @@
+import csv
+
+class Table:
+    @staticmethod
+    def from_definition(definition):
+        return CSVTable(definition)
+
+    def __init__(self, definition):
+        self.definition = definition
+        self.columns = {}
+        self.rows = []
+
+    # returns the *total* size of the set, not the number
+    # of currently loaded rows, which should probably
+    # stay internal to whatever subclass is implementing this
+
+    def size(self):
+        return 0
+
+    def each_row(self, iterator):
+        if not self.rows:
+            self.load_rows(0, 1000)
+
+        for idx in range(self.size()):
+            iterator(self.rows[idx], self.columns, idx)
+
+    def load_rows(self, start, length):
+        pass
+
+class CSVTable(Table):
+    def load_rows(self, start, length):
+        with open(self.definition['source']) as csvfile:
+            tablereader = csv.reader(csvfile)
+            for row in tablereader:
+                self.rows.append(row)
+
+            self.columns = self.rows[0]
+            del self.rows[0]
+
+    def size(self):
+        return len(self.rows)
