@@ -1,9 +1,14 @@
 import csv
+import os
 
 class Table:
     @staticmethod
     def from_definition(definition):
-        return CSVTable(definition)
+        if 'command' in definition:
+            return CmdTable(definition)
+
+        if 'csvfile' in definition:
+            return CSVTable(definition)
 
     def __init__(self, definition):
         self.definition = definition
@@ -14,14 +19,17 @@ class Table:
     # of currently loaded rows, which should probably
     # stay internal to whatever subclass is implementing this
 
-    def size(self):
-        return 0
+    def total_size(self):
+        return len(self.rows)
+
+    def current_size(self):
+        return len(self.rows)
 
     def each_row(self, iterator):
         if not self.rows:
             self.load_rows(0, 1000)
 
-        for idx in range(self.size()):
+        for idx in range(self.total_size()):
             iterator(self.rows[idx], self.columns, idx)
 
     def load_rows(self, start, length):
@@ -48,5 +56,18 @@ class CSVTable(Table):
             self.columns = self.rows[0]
             del self.rows[0]
 
-    def size(self):
-        return len(self.rows)
+class CmdTable(Table):
+    def __init__(self, definition):
+        super().__init__(definition)
+        defaults = {'delimiter': ",", 'newline': "\n"}
+        self.definition = defaults | self.definition
+
+    def load_rows(self, start, length):
+        rawdata = os.popen(self.definition['command']).read()
+        rawdata = rawdata.split(self.definition['newline'])
+        tablereader = csv.reader(rawdata, delimiter=self.definition['delimiter'])
+        for row in tablereader:
+            self.rows.append(row)
+
+        self.columns = self.rows[0]
+        del self.rows[0]
