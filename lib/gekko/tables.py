@@ -27,6 +27,12 @@ class Table:
     def load_rows(self, start, length):
         pass
 
+    def header_indices(self, headers):
+        if len(headers) == 0:
+            return list(range(len(self.columns)))
+        else:
+            return [self.columns.index(header) for header in headers]
+
 class CSVTable(Table):
     def load_rows(self, start, length):
         with open(self.definition['source']) as csvfile:

@@ -31,8 +31,9 @@ class Report:
     def text(self):
         textbuf = ''
 
+        columns = self.definition['output'].get('columns', [])
         for out in self.definition['output']['sets']:
-            textbuf += self.sets[out].text()
+            textbuf += self.sets[out].text(columns)
 
         return textbuf
 

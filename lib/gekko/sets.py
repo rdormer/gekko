@@ -42,19 +42,23 @@ class Set:
             current_tree[last_group] = [row]
 
 
-    def text(self):
+    def text(self, columns_to_print):
         self.evaluate()
-        return self.print_groups(self.groups)
+        mytable = self.table(self.config['table'])
+        headers = mytable.header_indices(columns_to_print)
+        return self.print_groups(self.groups, headers)
 
-    def rows_to_text(self, group):
+    def rows_to_text(self, group, headers):
         buf = ''
         for row in group:
-            buf += ''.join(str(x) + ',' for x in row)
-            buf += "\n"
+            line = ''.join(str(row[idx]) + ',' for idx in headers)
+            line = line[:-1] + "\n"
+            buf += line
+
         return buf
 
-    def print_groups(self, groups):
+    def print_groups(self, groups, headers):
         if isinstance(groups, dict):
-            return ''.join(self.print_groups(groups[group]) for group in groups)
+            return ''.join(self.print_groups(groups[group], headers) for group in groups)
         else:
-            return self.rows_to_text(groups)
+            return self.rows_to_text(groups, headers)
