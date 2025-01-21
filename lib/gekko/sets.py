@@ -1,3 +1,5 @@
+NO_GROUP_KEY = '--none--'
+
 class Set:
     def __init__(self, config, report):
         self.table = report.get_table
@@ -15,6 +17,9 @@ class Set:
 
             if 'group' in self.config:
                 data.each_row(self.collect_groups)
+            else:
+                self.groups[NO_GROUP_KEY] = []
+                data.each_row(self.append_row)
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either
@@ -41,6 +46,11 @@ class Set:
         else:
             current_tree[last_group] = [row]
 
+    # Default method for when no grouping is defined.  Just throw each row
+    # into a single internal key used to indicate that no explicit group exists
+
+    def append_row(self, row, headers, idx):
+        self.groups[NO_GROUP_KEY].append(row)
 
     def text(self, columns_to_print):
         self.evaluate()
