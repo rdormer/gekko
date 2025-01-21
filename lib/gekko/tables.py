@@ -34,9 +34,14 @@ class Table:
             return [self.columns.index(header) for header in headers]
 
 class CSVTable(Table):
+    def __init__(self, definition):
+        super().__init__(definition)
+        defaults = {'delimiter': ",", 'newline': "\n"}
+        self.definition = defaults | self.definition
+
     def load_rows(self, start, length):
-        with open(self.definition['source']) as csvfile:
-            tablereader = csv.reader(csvfile)
+        with open(self.definition['csvfile'], newline=self.definition['newline']) as csvfile:
+            tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
             for row in tablereader:
                 self.rows.append(row)
 
