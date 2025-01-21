@@ -35,6 +35,13 @@ class Table:
     def load_rows(self, start, length):
         pass
 
+    def define_headers(self):
+        if 'defcolumns' in self.definition:
+            self.columns = self.definition['defcolumns']
+        else:
+            self.columns = self.rows[0]
+            del self.rows[0]
+
     def header_indices(self, headers):
         if len(headers) == 0:
             return list(range(len(self.columns)))
@@ -53,8 +60,7 @@ class CSVTable(Table):
             for row in tablereader:
                 self.rows.append(row)
 
-            self.columns = self.rows[0]
-            del self.rows[0]
+            self.define_headers()
 
 class CmdTable(Table):
     def __init__(self, definition):
@@ -63,11 +69,24 @@ class CmdTable(Table):
         self.definition = defaults | self.definition
 
     def load_rows(self, start, length):
-        rawdata = os.popen(self.definition['command']).read()
+        rawdata = os.popen(self.definition['command']).read().strip()
         rawdata = rawdata.split(self.definition['newline'])
+
+        if 'rowlines' in self.definition:
+            rawdata = self.concatenate_rows(rawdata, self.definition['rowlines'])
+
         tablereader = csv.reader(rawdata, delimiter=self.definition['delimiter'])
         for row in tablereader:
             self.rows.append(row)
 
-        self.columns = self.rows[0]
-        del self.rows[0]
+        self.define_headers()
+
+    def concatenate_rows(self, rows, size):
+        catlines = []
+
+        for x in range(0, len(rows), size):
+          line = rows[x:x+size]
+          line = [x + self.definition['delimiter'] for x in line]
+          catlines.append(''.join(line))
+
+        return catlines
