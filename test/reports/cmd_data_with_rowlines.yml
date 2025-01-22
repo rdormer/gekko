@@ -1,0 +1,33 @@
+# Demonstrates the rowlines option for command sources, which allows
+# you to specify the number of lines of output that should be concatenated
+# together (with separators) to form a single row of CSV input
+
+sources:
+  tsdata:
+    command: "cat test/fixtures/test_data_set_rowlines.txt"
+    delimiter: "\t"
+    rowlines: 6
+    defcolumns:
+      - Symbol
+      - Side
+      - Type
+      - Qty
+      - qty2
+      - x
+      - Price
+      - Time
+
+tables:
+  tradelist:
+    source: tsdata
+
+output:
+  tables:
+    - tradelist
+  columns:
+    - Symbol
+    - Side
+    - Type
+    - Qty
+    - Price
+    - Time

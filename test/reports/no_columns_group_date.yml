@@ -1,0 +1,13 @@
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+tables:
+  trading_days:
+    source: gappers
+    group:
+      - Date
+
+output:
+  tables:
+    - trading_days
