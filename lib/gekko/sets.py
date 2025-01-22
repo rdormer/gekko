@@ -2,7 +2,7 @@ NO_GROUP_KEY = '--none--'
 
 class Set:
     def __init__(self, config, report):
-        self.table = report.get_table
+        self.source = report.get_source
         self.set = report.get_set
         self.config = config
         self.groups = {}
@@ -12,8 +12,8 @@ class Set:
             for subset in self.config['sets']:
                 self.set(subset).evaluate()
 
-        if 'table' in self.config:
-            data = self.table(self.config['table'])
+        if 'source' in self.config:
+            data = self.source(self.config['source'])
 
             if 'group' in self.config:
                 data.each_row(self.collect_groups)
@@ -54,8 +54,8 @@ class Set:
 
     def text(self, columns_to_print):
         self.evaluate()
-        mytable = self.table(self.config['table'])
-        headers = mytable.header_indices(columns_to_print)
+        mysource = self.source(self.config['source'])
+        headers = mysource.header_indices(columns_to_print)
         return self.print_groups(self.groups, headers)
 
     def rows_to_text(self, group, headers):

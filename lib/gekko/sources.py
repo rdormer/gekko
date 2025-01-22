@@ -1,14 +1,14 @@
 import csv
 import os
 
-class Table:
+class Source:
     @staticmethod
     def from_definition(definition):
         if 'command' in definition:
-            return CmdTable(definition)
+            return CmdSource(definition)
 
         if 'csvfile' in definition:
-            return CSVTable(definition)
+            return CSVSource(definition)
 
     def __init__(self, definition):
         self.definition = definition
@@ -48,7 +48,7 @@ class Table:
         else:
             return [self.columns.index(header) for header in headers]
 
-class CSVTable(Table):
+class CSVSource(Source):
     def __init__(self, definition):
         super().__init__(definition)
         defaults = {'delimiter': ",", 'newline': "\n"}
@@ -62,7 +62,7 @@ class CSVTable(Table):
 
             self.define_headers()
 
-class CmdTable(Table):
+class CmdSource(Source):
     def __init__(self, definition):
         super().__init__(definition)
         defaults = {'delimiter': ",", 'newline': "\n"}

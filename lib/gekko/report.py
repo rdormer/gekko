@@ -1,4 +1,4 @@
-from lib.gekko.tables import Table
+from lib.gekko.sources import Source
 from lib.gekko.sets import Set
 import yaml
 
@@ -13,19 +13,19 @@ class Report:
         defaults = {'headers': True}
         definition['output'] = defaults | definition['output']
         self.definition = definition
-        self.tables = {}
+        self.sources = {}
         self.sets = {}
 
-        for table in definition['tables']:
-            tabledef = definition['tables'][table]
-            self.tables[table] = Table.from_definition(tabledef)
+        for source in definition['sources']:
+            tabledef = definition['sources'][source]
+            self.sources[source] = Source.from_definition(tabledef)
 
         for set in definition['sets']:
             setdef = definition['sets'][set]
             self.sets[set] = Set(setdef, self)
 
-    def get_table(self, name):
-        return self.tables[name]
+    def get_source(self, name):
+        return self.sources[name]
 
     def get_set(self, name):
         return self.sets[name]
