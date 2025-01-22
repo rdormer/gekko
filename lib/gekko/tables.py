@@ -1,16 +1,16 @@
 NO_GROUP_KEY = '--none--'
 
-class Set:
+class Table:
     def __init__(self, config, report):
         self.source = report.get_source
-        self.set = report.get_set
+        self.table = report.get_table
         self.config = config
         self.groups = {}
 
     def evaluate(self):
-        if 'sets' in self.config:
-            for subset in self.config['sets']:
-                self.set(subset).evaluate()
+        if 'tables' in self.config:
+            for table in self.config['tables']:
+                self.table(table).evaluate()
 
         if 'source' in self.config:
             data = self.source(self.config['source'])
