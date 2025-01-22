@@ -11,7 +11,8 @@ class Report:
 
     def __init__(self, definition):
         defaults = {'headers': True}
-        self.definition = defaults | definition
+        definition['output'] = defaults | definition['output']
+        self.definition = definition
         self.tables = {}
         self.sets = {}
 
@@ -31,12 +32,12 @@ class Report:
 
     def text(self):
         textbuf = ''
-
         columns = self.definition['output'].get('columns', [])
 
-        if self.definition['headers']:
-            textbuf += ''.join(col + ',' for col in columns[0:-1])
-            textbuf += str(columns[-1]) + "\n"
+        if self.definition['output']['headers']:
+            if columns:
+                textbuf += ''.join(col + ',' for col in columns[0:-1])
+                textbuf += str(columns[-1]) + "\n"
 
         for out in self.definition['output']['sets']:
             textbuf += self.sets[out].text(columns)
