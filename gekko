@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from lib.gekko.config import load_config
 from lib.gekko.report import Report
 import argparse
 
@@ -14,6 +14,7 @@ def parse_command_line():
   return opts.parse_args()
 
 args = parse_command_line()
-report = Report.load_file(args.report)
+config = load_config(args.report)
+report = Report(config)
 
 print(report.text())

@@ -1,14 +1,7 @@
 from lib.gekko.sources import Source
 from lib.gekko.tables import Table
-import yaml
 
 class Report:
-    @staticmethod
-    def load_file(report_path):
-        with open(report_path) as repfile:
-            report = yaml.safe_load(repfile)
-            return Report(report)
-
     def __init__(self, definition):
         defaults = {'headers': True}
         definition['output'] = defaults | definition['output']

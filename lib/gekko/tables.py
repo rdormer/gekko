@@ -8,18 +8,19 @@ class Table:
         self.groups = {}
 
     def evaluate(self):
-        if 'tables' in self.config:
-            for table in self.config['tables']:
+        if 'table' in self.config:
+            for table in self.config['table']:
                 self.table(table).evaluate()
 
         if 'source' in self.config:
-            data = self.source(self.config['source'])
+            for source in self.config['source']:
+                data = self.source(source)
 
-            if 'group' in self.config:
-                data.each_row(self.collect_groups)
-            else:
-                self.groups[NO_GROUP_KEY] = []
-                data.each_row(self.append_row)
+                if 'group' in self.config:
+                    data.each_row(self.collect_groups)
+                else:
+                    self.groups[NO_GROUP_KEY] = []
+                    data.each_row(self.append_row)
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either
@@ -54,8 +55,7 @@ class Table:
 
     def text(self, columns_to_print):
         self.evaluate()
-        mysource = self.source(self.config['source'])
-        headers = mysource.header_indices(columns_to_print)
+        headers = self.header_indices(columns_to_print)
         return self.print_groups(self.groups, headers)
 
     def rows_to_text(self, group, headers):
@@ -66,6 +66,20 @@ class Table:
             buf += line
 
         return buf
+
+    # look for headers from one of our sources, otherwise defer
+    # to one of our child tables to get them
+
+    def header_indices(self, columns_to_print):
+        if 'source' in self.config:
+            for current in self.config['source']:
+                mysource = self.source(current)
+                return mysource.header_indices(columns_to_print)
+
+        if 'table' in self.config:
+            for current in self.config['table']:
+                mytable = self.table(current)
+                return mytable.header_indices(columns_to_print)
 
     def print_groups(self, groups, headers):
         if isinstance(groups, dict):
