@@ -1,0 +1,13 @@
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+tables:
+  source_table:
+    source: gappers
+  test_table:
+    table: source_table
+
+output:
+  tables:
+    - test_table

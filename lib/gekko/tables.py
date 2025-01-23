@@ -8,9 +8,14 @@ class Table:
         self.groups = {}
 
     def evaluate(self):
+        if not 'group' in self.config:
+            self.groups[NO_GROUP_KEY] = []
+
         if 'table' in self.config:
             for table in self.config['table']:
-                self.table(table).evaluate()
+                table_obj = self.table(table)
+                table_obj.evaluate()
+                self.append(table_obj)
 
         if 'source' in self.config:
             for source in self.config['source']:
@@ -19,8 +24,15 @@ class Table:
                 if 'group' in self.config:
                     data.each_row(self.collect_groups)
                 else:
-                    self.groups[NO_GROUP_KEY] = []
                     data.each_row(self.append_row)
+
+    def append(self, srctable):
+        for group in srctable.groups:
+            for row in srctable.groups[group]:
+                if 'group' in self.config:
+                    self.collect_groups(row, [], -1)
+                else:
+                    self.append_row(row, [], -1)
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either
