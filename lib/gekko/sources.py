@@ -11,9 +11,14 @@ class Source:
             return CSVSource(definition)
 
     def __init__(self, definition):
+        if 'defcolumns' in definition:
+            self.columns = definition['defcolumns']
+        else:
+            self.columns = {}
+
         self.definition = definition
-        self.columns = {}
         self.rows = []
+
 
     # returns the *total* size of the set, not the number
     # of currently loaded rows, which should probably
@@ -35,12 +40,23 @@ class Source:
     def load_rows(self, start, length):
         pass
 
-    def define_headers(self):
-        if 'defcolumns' in self.definition:
-            self.columns = self.definition['defcolumns']
-        else:
-            self.columns = self.rows[0]
-            del self.rows[0]
+    # Checks columns for consistency.  If no columns are defined then there is no defcolumns
+    # directive, so grab the first line you come across on the assumption it's a header. From
+    # then on, compare the first line of every subsequent set of lines against this to ensure
+    # all sets of lines have the same headers (but not if defcolumns is present).  Then remove
+    # the headers, returning a lineset stripped of those headers for inclusion in a source
+
+    def validate_headers(self, lines):
+        if not self.columns:
+            self.columns = lines[0]
+
+        if not 'defcolumns' in self.definition:
+            if self.columns != lines[0]:
+                return False
+            else:
+                del lines[0]
+
+        return True
 
     def header_indices(self, headers):
         if len(headers) == 0:
@@ -54,13 +70,19 @@ class CSVSource(Source):
         defaults = {'delimiter': ",", 'newline': "\n"}
         self.definition = defaults | self.definition
 
-    def load_rows(self, start, length):
-        with open(self.definition['csvfile'], newline=self.definition['newline']) as csvfile:
-            tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
-            for row in tablereader:
-                self.rows.append(row)
+        if type(self.definition['csvfile']) == str:
+            self.definition['csvfile'] = [ self.definition['csvfile'] ]
 
-            self.define_headers()
+    def load_rows(self, start, length):
+        for fname in self.definition['csvfile']:
+            linebuf = []
+            with open(fname, newline=self.definition['newline']) as csvfile:
+                tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
+                for row in tablereader:
+                    linebuf.append(row)
+
+            if self.validate_headers(linebuf):
+                self.rows.extend(linebuf)
 
 class CmdSource(Source):
     def __init__(self, definition):
@@ -79,7 +101,7 @@ class CmdSource(Source):
         for row in tablereader:
             self.rows.append(row)
 
-        self.define_headers()
+        self.validate_headers(self.rows)
 
     def concatenate_rows(self, rows, size):
         catlines = []

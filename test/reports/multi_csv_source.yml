@@ -1,0 +1,14 @@
+sources:
+  mergesource:
+    csvfile:
+      - test/fixtures/multi-1.csv
+      - test/fixtures/multi-2.csv
+      - test/fixtures/multi-3.csv
+
+tables:
+  alltogether:
+    source: mergesource
+
+output:
+  tables:
+    - alltogether

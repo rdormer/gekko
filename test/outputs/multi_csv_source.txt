@@ -1,0 +1,10 @@
+Jane,Doe,23
+John,Doe,37
+Anonie,Mouse,99
+Stan,Smith,40
+Peter,Griffin,42
+Homer,Simpson,40
+Herbert,Hoover,101
+John,Kennedy,90
+Abraham,Lincoln,198
+

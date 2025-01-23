@@ -2,7 +2,6 @@
 
 from lib.gekko.report import Report
 import argparse
-import csv
 
 def parse_command_line():
   opts = argparse.ArgumentParser(
