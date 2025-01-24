@@ -37,6 +37,16 @@ class Table:
                 else:
                     self.append_row(row, [], -1)
 
+    def each_row(self, fn, data=None):
+        data = data or self.groups
+
+        if type(data) == list:
+            for row in data:
+                fn(row)
+        else:
+            for group in data:
+                self.each_row(fn, data[group])
+
     def set_headers_if(self, srcobj):
         if not self.headers and srcobj.headers:
             self.headers = srcobj.headers
@@ -74,21 +84,13 @@ class Table:
 
     def text(self, headers_to_print):
         self.evaluate()
-        self.headers_to_print = headers_to_print
-        return self.print_groups(self.groups)
+        buffer = ''
 
-    def print_groups(self, groups):
-        if isinstance(groups, dict):
-            return ''.join(self.print_groups(groups[group]) for group in groups)
-        else:
-            return self.rows_to_text(groups)
-
-    def rows_to_text(self, group):
-        buf = ''
-        for row in group:
-            filtered = self.headers.filter_tuple(row, self.headers_to_print)
+        def row_fmt(row):
+            nonlocal buffer
+            filtered = self.headers.filter_tuple(row, headers_to_print)
             line = ''.join(str(x) + ',' for x in filtered)
-            line = line[:-1] + "\n"
-            buf += line
+            buffer += line[:-1] + "\n"
 
-        return buf
+        self.each_row(row_fmt)
+        return buffer
