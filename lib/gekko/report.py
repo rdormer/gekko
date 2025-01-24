@@ -36,6 +36,3 @@ class Report:
             textbuf += self.tables[out].text(columns)
 
         return textbuf
-
-    def dump_as_string(self):
-        return yaml.dump(self.definition)

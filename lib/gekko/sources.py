@@ -33,7 +33,7 @@ class Source:
         for idx in range(self.total_size()):
             iterator(self.rows[idx], self.headers, idx)
 
-    def load_rows(self, start, length):
+    def __load_rows(self, start, length):
         pass
 
 class CSVSource(Source):
@@ -64,7 +64,7 @@ class CmdSource(Source):
         rawdata = rawdata.split(self.definition['newline'])
 
         if 'rowlines' in self.definition:
-            rawdata = self.concatenate_rows(rawdata, self.definition['rowlines'])
+            rawdata = self.__concatenate_rows(rawdata, self.definition['rowlines'])
 
         tablereader = csv.reader(rawdata, delimiter=self.definition['delimiter'])
         for row in tablereader:
@@ -72,7 +72,7 @@ class CmdSource(Source):
 
         self.headers.handle_headers(self.rows)
 
-    def concatenate_rows(self, rows, size):
+    def __concatenate_rows(self, rows, size):
         catlines = []
 
         for x in range(0, len(rows), size):
