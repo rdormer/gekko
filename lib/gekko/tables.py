@@ -4,6 +4,7 @@ class Table:
     def __init__(self, config, report):
         self.source = report.get_source
         self.table = report.get_table
+        self.headers = None
         self.config = config
         self.groups = {}
 
@@ -15,11 +16,13 @@ class Table:
             for table in self.config['table']:
                 table_obj = self.table(table)
                 table_obj.evaluate()
+                self.set_headers_if(table_obj)
                 self.append(table_obj)
 
         if 'source' in self.config:
             for source in self.config['source']:
                 data = self.source(source)
+                self.set_headers_if(data)
 
                 if 'group' in self.config:
                     data.each_row(self.collect_groups)
@@ -33,6 +36,10 @@ class Table:
                     self.collect_groups(row, [], -1)
                 else:
                     self.append_row(row, [], -1)
+
+    def set_headers_if(self, srcobj):
+        if not self.headers and srcobj.headers:
+            self.headers = srcobj.headers
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either
@@ -65,36 +72,23 @@ class Table:
     def append_row(self, row, headers, idx):
         self.groups[NO_GROUP_KEY].append(row)
 
-    def text(self, columns_to_print):
+    def text(self, headers_to_print):
         self.evaluate()
-        headers = self.header_indices(columns_to_print)
-        return self.print_groups(self.groups, headers)
+        self.headers_to_print = headers_to_print
+        return self.print_groups(self.groups)
 
-    def rows_to_text(self, group, headers):
+    def print_groups(self, groups):
+        if isinstance(groups, dict):
+            return ''.join(self.print_groups(groups[group]) for group in groups)
+        else:
+            return self.rows_to_text(groups)
+
+    def rows_to_text(self, group):
         buf = ''
         for row in group:
-            line = ''.join(str(row[idx]) + ',' for idx in headers)
+            filtered = self.headers.filter_tuple(row, self.headers_to_print)
+            line = ''.join(str(x) + ',' for x in filtered)
             line = line[:-1] + "\n"
             buf += line
 
         return buf
-
-    # look for headers from one of our sources, otherwise defer
-    # to one of our child tables to get them
-
-    def header_indices(self, columns_to_print):
-        if 'source' in self.config:
-            for current in self.config['source']:
-                mysource = self.source(current)
-                return mysource.header_indices(columns_to_print)
-
-        if 'table' in self.config:
-            for current in self.config['table']:
-                mytable = self.table(current)
-                return mytable.header_indices(columns_to_print)
-
-    def print_groups(self, groups, headers):
-        if isinstance(groups, dict):
-            return ''.join(self.print_groups(groups[group], headers) for group in groups)
-        else:
-            return self.rows_to_text(groups, headers)
