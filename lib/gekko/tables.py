@@ -1,6 +1,9 @@
-NO_GROUP_KEY = '--none--'
+from lib.gekko.expression import Expression
+
 
 class Table:
+    NO_GROUP_KEY = '--none--'
+
     def __init__(self, config, report):
         self.source = report.get_source
         self.table = report.get_table
@@ -8,15 +11,24 @@ class Table:
         self.config = config
         self.groups = {}
 
-    def each_row(self, fn, data=None):
+    def each_group(self, fn, data=None):
         data = data or self.groups
 
         if type(data) == list:
-            for row in data:
-                fn(row)
+            fn(data)
         else:
             for group in data:
-                self.each_row(fn, data[group])
+                self.each_group(fn, data[group])
+
+    def each_row(self, row_fn, data=None):
+        data = data or self.groups
+
+        def group_fn(data):
+            nonlocal row_fn
+            for row in data:
+                row_fn(row)
+
+        self.each_group(group_fn, data)
 
     def text(self, headers_to_print):
         self.__evaluate()
@@ -33,8 +45,22 @@ class Table:
 
     def __evaluate(self):
         if not 'group' in self.config:
-            self.groups[NO_GROUP_KEY] = []
+            self.groups[self.NO_GROUP_KEY] = []
 
+        self.__load_data()
+
+        if 'per_row' in self.config:
+            self.each_row(self.__row_evaluate)
+
+    def __row_evaluate(self, row):
+        header_vars = self.headers.row_map(row)
+        for expr in self.config['per_row']:
+            changes = Expression(expr).eval(header_vars)
+            for newcol in changes:
+                self.headers.add_column(newcol)
+                row.append(changes[newcol])
+
+    def __load_data(self):
         if 'table' in self.config:
             for table in self.config['table']:
                 table_obj = self.table(table)
@@ -93,4 +119,4 @@ class Table:
     # into a single internal key used to indicate that no explicit group exists
 
     def __append_row(self, row, headers, idx):
-        self.groups[NO_GROUP_KEY].append(row)
+        self.groups[self.NO_GROUP_KEY].append(row)

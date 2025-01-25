@@ -6,6 +6,7 @@ Date,Ticker,Description
 12/9/2024,SATL,Satellogic Inc.
 12/10/2024,SATL,Satellogic Inc.
 1/2/2025,SATL,Satellogic Inc.
+1/21/2025,SATL,Satellogic Inc.
 12/9/2024,NVTS,Navitas Semiconductor Corporation
 12/9/2024,RXRX,Recursion Pharmaceuticals, Inc.
 12/9/2024,BBAI,BigBear.ai, Inc.
@@ -29,8 +30,8 @@ Date,Ticker,Description
 12/18/2024,ARQQ,Arqit Quantum Inc.
 12/19/2024,ARQQ,Arqit Quantum Inc.
 1/15/2025,ARQQ,Arqit Quantum Inc.
-1/17/2025,ARQQ,Arqit Quantum Inc.
 1/16/2025,ARQQ,Arqit Quantum Inc.
+1/17/2025,ARQQ,Arqit Quantum Inc.
 12/9/2024,QUBT,Quantum Computing Inc.
 12/17/2024,QUBT,Quantum Computing Inc.
 12/18/2024,QUBT,Quantum Computing Inc.
@@ -66,6 +67,7 @@ Date,Ticker,Description
 12/10/2024,UNFI,United Natural Foods, Inc.
 12/10/2024,PUMP,ProPetro Holding Corp.
 12/10/2024,PL,Planet Labs PBC
+1/21/2025,PL,Planet Labs PBC
 12/10/2024,FLNC,Fluence Energy, Inc.
 1/17/2025,FLNC,Fluence Energy, Inc.
 12/10/2024,NAMS,NewAmsterdam Pharma Company N.V.
@@ -85,8 +87,8 @@ Date,Ticker,Description
 12/11/2024,PLAY,Dave & Buster's Entertainment, Inc.
 12/11/2024,RLAY,Relay Therapeutics, Inc.
 12/11/2024,AVDL,Avadel Pharmaceuticals plc
-1/15/2025,AVDL,Avadel Pharmaceuticals plc
 1/10/2025,AVDL,Avadel Pharmaceuticals plc
+1/15/2025,AVDL,Avadel Pharmaceuticals plc
 12/11/2024,PDCO,Patterson Companies, Inc.
 12/12/2024,TRVI,Trevi Therapeutics, Inc.
 12/13/2024,TRVI,Trevi Therapeutics, Inc.
@@ -158,9 +160,9 @@ Date,Ticker,Description
 12/27/2024,KULR,KULR Technology Group, Inc.
 1/2/2025,KULR,KULR Technology Group, Inc.
 1/6/2025,KULR,KULR Technology Group, Inc.
+1/10/2025,KULR,KULR Technology Group, Inc.
 1/14/2025,KULR,KULR Technology Group, Inc.
 1/15/2025,KULR,KULR Technology Group, Inc.
-1/10/2025,KULR,KULR Technology Group, Inc.
 12/19/2024,VUZI,Vuzix Corporation
 12/19/2024,LW,Lamb Weston Holdings, Inc.
 12/19/2024,IONQ,IonQ, Inc.
@@ -186,10 +188,10 @@ Date,Ticker,Description
 12/30/2024,LAES,SEALSQ Corp
 1/2/2025,LAES,SEALSQ Corp
 1/6/2025,LAES,SEALSQ Corp
+1/10/2025,LAES,SEALSQ Corp
 1/13/2025,LAES,SEALSQ Corp
 1/15/2025,LAES,SEALSQ Corp
 1/17/2025,LAES,SEALSQ Corp
-1/10/2025,LAES,SEALSQ Corp
 12/23/2024,PLYA,Playa Hotels & Resorts N.V.
 12/23/2024,XRX,Xerox Holdings Corporation
 12/23/2024,MFH,Mercurity Fintech Holding Inc. - American
@@ -212,6 +214,7 @@ Date,Ticker,Description
 12/30/2024,QMCO,Quantum Corporation
 12/31/2024,FTAI,FTAI Aviation Ltd.
 1/16/2025,FTAI,FTAI Aviation Ltd.
+1/21/2025,FTAI,FTAI Aviation Ltd.
 12/31/2024,ACAD,ACADIA Pharmaceuticals Inc.
 1/2/2025,MODG,Topgolf Callaway Brands Corp.
 1/2/2025,U,Unity Software Inc.
@@ -220,6 +223,7 @@ Date,Ticker,Description
 1/6/2025,IRBT,iRobot Corporation
 1/6/2025,AMPX,Amprius Technologies, Inc.
 1/14/2025,AMPX,Amprius Technologies, Inc.
+1/21/2025,AMPX,Amprius Technologies, Inc.
 1/6/2025,CRNC,Cerence Inc.
 1/6/2025,PLUG,Plug Power, Inc.
 1/15/2025,PLUG,Plug Power, Inc.
@@ -242,17 +246,32 @@ Date,Ticker,Description
 1/7/2025,GETY,Getty Images Holdings, Inc.
 1/7/2025,FRO,Frontline Plc
 1/7/2025,NARI,Inari Medical, Inc.
+1/10/2025,WBA,Walgreens Boots Alliance, Inc.
+1/10/2025,MVST,Microvast Holdings, Inc.
+1/10/2025,SANA,Sana Biotechnology, Inc.
+1/10/2025,ZIM,ZIM Integrated Shipping Services Ltd.
+1/10/2025,CEG,Constellation Energy Corporation
+1/10/2025,APLS,Apellis Pharmaceuticals, Inc.
+1/10/2025,NEOG,Neogen Corporation
+1/10/2025,TMDX,TransMedics Group, Inc.
+1/10/2025,STZ,Constellation Brands, Inc.
+1/10/2025,ARHS,Arhaus, Inc.
+1/10/2025,DYN,Dyne Therapeutics, Inc.
+1/10/2025,PENG,Penguin Solutions, Inc.
+1/10/2025,OPFI,OppFi Inc.
+1/13/2025,OPFI,OppFi Inc.
+1/10/2025,PCRX,Pacira BioSciences, Inc.
+1/10/2025,CDZI,Cadiz, Inc.
 1/13/2025,SMLR,Semler Scientific, Inc.
 1/13/2025,MRNA,Moderna, Inc.
 1/13/2025,DEFTF,DEFI TECHNOLOGIES INC NEW
 1/13/2025,AS,Amer Sports, Inc.
 1/13/2025,TEM,Tempus AI, Inc.
+1/21/2025,TEM,Tempus AI, Inc.
 1/13/2025,SWTX,SpringWorks Therapeutics, Inc.
 1/13/2025,OPCH,Option Care Health, Inc.
 1/13/2025,ITCI,Intra-Cellular Therapies Inc.
 1/13/2025,ARQT,Arcutis Biotherapeutics, Inc.
-1/13/2025,OPFI,OppFi Inc.
-1/10/2025,OPFI,OppFi Inc.
 1/14/2025,DJT,Trump Media & Technology Group Corp.
 1/14/2025,ICLR,ICON plc
 1/14/2025,WULF,TeraWulf Inc.
@@ -260,6 +279,7 @@ Date,Ticker,Description
 1/14/2025,APLD,Applied Digital Corporation
 1/14/2025,KBH,KB Home
 1/14/2025,NNE,Nano Nuclear Energy Inc.
+1/21/2025,NNE,Nano Nuclear Energy Inc.
 1/14/2025,OLMA,Olema Pharmaceuticals, Inc.
 1/15/2025,WOLF,Wolfspeed, Inc.
 1/15/2025,NEO,NeoGenomics, Inc.
@@ -278,24 +298,17 @@ Date,Ticker,Description
 1/15/2025,DFH,Dream Finders Homes, Inc.
 1/15/2025,BECN,Beacon Roofing Supply, Inc.
 1/15/2025,FREY,FREYR Battery, Inc.
-1/17/2025,INTC,Intel Corporation
-1/17/2025,BMBL,Bumble Inc.
-1/17/2025,GPRK,Geopark Ltd
 1/16/2025,SYM,Symbotic Inc.
 1/16/2025,PNC,PNC Financial Services Group, Inc. (The)
 1/16/2025,DAN,Dana Incorporated
-1/10/2025,WBA,Walgreens Boots Alliance, Inc.
-1/10/2025,MVST,Microvast Holdings, Inc.
-1/10/2025,SANA,Sana Biotechnology, Inc.
-1/10/2025,ZIM,ZIM Integrated Shipping Services Ltd.
-1/10/2025,CEG,Constellation Energy Corporation
-1/10/2025,APLS,Apellis Pharmaceuticals, Inc.
-1/10/2025,NEOG,Neogen Corporation
-1/10/2025,TMDX,TransMedics Group, Inc.
-1/10/2025,STZ,Constellation Brands, Inc.
-1/10/2025,ARHS,Arhaus, Inc.
-1/10/2025,DYN,Dyne Therapeutics, Inc.
-1/10/2025,PENG,Penguin Solutions, Inc.
-1/10/2025,PCRX,Pacira BioSciences, Inc.
-1/10/2025,CDZI,Cadiz, Inc.
+1/17/2025,INTC,Intel Corporation
+1/17/2025,BMBL,Bumble Inc.
+1/17/2025,GPRK,Geopark Ltd
+1/21/2025,RKLB,Rocket Lab USA, Inc.
+1/21/2025,SMR,NuScale Power Corporation
+1/21/2025,VSAT,ViaSat, Inc.
+1/21/2025,AAOI,Applied Optoelectronics, Inc.
+1/21/2025,RDW,Redwire Corporation
+1/21/2025,REPL,Replimune Group, Inc.
+1/21/2025,EOLS,Evolus, Inc. Common Stock
 

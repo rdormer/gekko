@@ -202,6 +202,24 @@ Date,Ticker,Description
 1/7/2025,ZJK,ZJK Industrial Co., Ltd.
 1/7/2025,NARI,Inari Medical, Inc.
 1/7/2025,ARBE,Arbe Robotics Ltd.
+1/10/2025,LAES,SEALSQ Corp
+1/10/2025,KULR,KULR Technology Group, Inc.
+1/10/2025,WBA,Walgreens Boots Alliance, Inc.
+1/10/2025,MVST,Microvast Holdings, Inc.
+1/10/2025,SANA,Sana Biotechnology, Inc.
+1/10/2025,ZIM,ZIM Integrated Shipping Services Ltd.
+1/10/2025,CEG,Constellation Energy Corporation
+1/10/2025,APLS,Apellis Pharmaceuticals, Inc.
+1/10/2025,NEOG,Neogen Corporation
+1/10/2025,TMDX,TransMedics Group, Inc.
+1/10/2025,STZ,Constellation Brands, Inc.
+1/10/2025,AVDL,Avadel Pharmaceuticals plc
+1/10/2025,ARHS,Arhaus, Inc.
+1/10/2025,DYN,Dyne Therapeutics, Inc.
+1/10/2025,PENG,Penguin Solutions, Inc.
+1/10/2025,OPFI,OppFi Inc.
+1/10/2025,PCRX,Pacira BioSciences, Inc.
+1/10/2025,CDZI,Cadiz, Inc.
 1/13/2025,RGTI,Rigetti Computing, Inc.
 1/13/2025,LAES,SEALSQ Corp
 1/13/2025,SMLR,Semler Scientific, Inc.
@@ -266,13 +284,6 @@ Date,Ticker,Description
 1/15/2025,KULR,KULR Technology Group, Inc.
 1/15/2025,BECN,Beacon Roofing Supply, Inc.
 1/15/2025,FREY,FREYR Battery, Inc.
-1/17/2025,LAES,SEALSQ Corp
-1/17/2025,INTC,Intel Corporation
-1/17/2025,FLNC,Fluence Energy, Inc.
-1/17/2025,RVNC,Revance Therapeutics, Inc.
-1/17/2025,BMBL,Bumble Inc.
-1/17/2025,ARQQ,Arqit Quantum Inc.
-1/17/2025,GPRK,Geopark Ltd
 1/16/2025,BBAI,BigBear.ai, Inc.
 1/16/2025,RZLV,Rezolve AI Limited
 1/16/2025,FTAI,FTAI Aviation Ltd.
@@ -280,22 +291,24 @@ Date,Ticker,Description
 1/16/2025,PNC,PNC Financial Services Group, Inc. (The)
 1/16/2025,DAN,Dana Incorporated
 1/16/2025,ARQQ,Arqit Quantum Inc.
-1/10/2025,LAES,SEALSQ Corp
-1/10/2025,KULR,KULR Technology Group, Inc.
-1/10/2025,WBA,Walgreens Boots Alliance, Inc.
-1/10/2025,MVST,Microvast Holdings, Inc.
-1/10/2025,SANA,Sana Biotechnology, Inc.
-1/10/2025,ZIM,ZIM Integrated Shipping Services Ltd.
-1/10/2025,CEG,Constellation Energy Corporation
-1/10/2025,APLS,Apellis Pharmaceuticals, Inc.
-1/10/2025,NEOG,Neogen Corporation
-1/10/2025,TMDX,TransMedics Group, Inc.
-1/10/2025,STZ,Constellation Brands, Inc.
-1/10/2025,AVDL,Avadel Pharmaceuticals plc
-1/10/2025,ARHS,Arhaus, Inc.
-1/10/2025,DYN,Dyne Therapeutics, Inc.
-1/10/2025,PENG,Penguin Solutions, Inc.
-1/10/2025,OPFI,OppFi Inc.
-1/10/2025,PCRX,Pacira BioSciences, Inc.
-1/10/2025,CDZI,Cadiz, Inc.
+1/17/2025,LAES,SEALSQ Corp
+1/17/2025,INTC,Intel Corporation
+1/17/2025,FLNC,Fluence Energy, Inc.
+1/17/2025,RVNC,Revance Therapeutics, Inc.
+1/17/2025,BMBL,Bumble Inc.
+1/17/2025,ARQQ,Arqit Quantum Inc.
+1/17/2025,GPRK,Geopark Ltd
+1/21/2025,RKLB,Rocket Lab USA, Inc.
+1/21/2025,SMR,NuScale Power Corporation
+1/21/2025,TEM,Tempus AI, Inc.
+1/21/2025,PL,Planet Labs PBC
+1/21/2025,AMPX,Amprius Technologies, Inc.
+1/21/2025,NNE,Nano Nuclear Energy Inc.
+1/21/2025,VSAT,ViaSat, Inc.
+1/21/2025,AAOI,Applied Optoelectronics, Inc.
+1/21/2025,FTAI,FTAI Aviation Ltd.
+1/21/2025,SATL,Satellogic Inc.
+1/21/2025,RDW,Redwire Corporation
+1/21/2025,REPL,Replimune Group, Inc.
+1/21/2025,EOLS,Evolus, Inc. Common Stock
 

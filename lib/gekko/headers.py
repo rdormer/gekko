@@ -12,11 +12,23 @@ class HeaderSet:
         else:
             return [self.header_names.index(header) for header in headers]
 
+    def add_column(self, colname):
+        if colname not in self.header_names:
+            self.header_names.append(colname)
+
     def filter_tuple(self, tuple, headers):
         return [tuple[idx] for idx in self.__indices__(headers)]
 
     def index(self, name):
         return self.header_names.index(name)
+
+    def row_map(self, row):
+        t = {}
+        for idx in range(len(row)):
+            key = self.header_names[idx]
+            t[key] = row[idx]
+
+        return t
 
     # if columns are defined, we don't care about the first line
     # if columns are not defined and we have none, grab the first line.  Those are your columns now.
