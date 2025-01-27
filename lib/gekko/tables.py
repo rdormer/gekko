@@ -11,6 +11,9 @@ class Table:
         self.groups = {}
         self.data = {}
 
+    def get_headers(self):
+        return self.headers
+
     def each_group(self, fn, data=None, path=None):
         data = data or self.data
         path = path or []
@@ -31,20 +34,7 @@ class Table:
 
         self.each_group(group_fn, data)
 
-    def text(self, headers_to_print):
-        self.__evaluate()
-        buffer = ''
-
-        def row_fmt(row):
-            nonlocal buffer
-            filtered = self.headers.filter_tuple(row, headers_to_print)
-            line = ''.join(str(x) + ',' for x in filtered)
-            buffer += line[:-1] + "\n"
-
-        self.each_row(row_fmt)
-        return buffer
-
-    def __evaluate(self):
+    def evaluate(self):
         if not 'group' in self.config:
             self.data[self.NO_GROUP_KEY] = []
 
@@ -79,7 +69,7 @@ class Table:
         if 'table' in self.config:
             for table in self.config['table']:
                 table_obj = self.table(table)
-                table_obj.__evaluate()
+                table_obj.evaluate()
                 self.__set_headers_if(table_obj)
                 self.__append(table_obj)
 

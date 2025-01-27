@@ -1,5 +1,6 @@
 from lib.gekko.sources import Source
 from lib.gekko.tables import Table
+from lib.gekko.view import View
 
 class Report:
     def __init__(self, definition):
@@ -16,6 +17,7 @@ class Report:
         for table in definition['tables']:
             tabledef = definition['tables'][table]
             self.tables[table] = Table(tabledef, self)
+            self.tables[table].evaluate()
 
     def get_source(self, name):
         return self.sources[name]
@@ -24,15 +26,7 @@ class Report:
         return self.tables[name]
 
     def text(self):
-        textbuf = ''
-        columns = self.definition['output'].get('columns', [])
-
-        if self.definition['output']['headers']:
-            if columns:
-                textbuf += ''.join(col + ',' for col in columns[0:-1])
-                textbuf += str(columns[-1]) + "\n"
-
-        for out in self.definition['output']['tables']:
-            textbuf += self.tables[out].text(columns)
-
+        viewobj = View(self.definition)
+        textbuf = viewobj.fmt_headers()
+        textbuf += viewobj.fmt_tables(self)
         return textbuf
