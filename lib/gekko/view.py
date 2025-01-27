@@ -26,9 +26,19 @@ class View:
 
         def row_fmt(row):
             nonlocal buffer
-            filtered = headers.filter_tuple(row, headers_to_print)
-            line = ''.join(str(x) + ',' for x in filtered)
-            buffer += line[:-1] + "\n"
+            buffer += self.__row_format(row, headers, headers_to_print)
 
         table.each_row(row_fmt)
         return buffer
+
+    def __row_format(self, row, headers, headers_to_print):
+        row_buffer = ''
+
+        if type(row) == list:
+            filtered = headers.filter_tuple(row, headers_to_print)
+            line = ''.join(str(x) + ',' for x in filtered)
+        else:
+            line = ''.join(str(row[key]) + ',' for key in headers_to_print)
+
+        row_buffer += line[:-1] + "\n"
+        return row_buffer

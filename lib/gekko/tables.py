@@ -25,6 +25,7 @@ class Table:
                 self.each_group(fn, data[group], path + [group])
 
     def each_row(self, row_fn, data=None):
+        data = data or self.groups
         data = data or self.data
 
         def group_fn(data, path):
@@ -63,7 +64,7 @@ class Table:
             for expr in expressions:
                 expr.eval(row_map, group_memo)
 
-        self.__upsert(self.groups, path, lambda val: group_memo)
+        self.__upsert(self.groups, path, lambda val: [group_memo])
 
     def __load_data(self):
         if 'table' in self.config:
