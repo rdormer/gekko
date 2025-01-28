@@ -56,11 +56,12 @@ class Table:
                 row.append(changes[newcol])
 
     def __group_evaluate(self, group, path):
-        group_memo = {}
+        group_memo = dict(zip(self.config['group'], path))
         expressions = [ Expression(expr) for expr in self.config['per_group'] ]
 
         for row in group:
             row_map = self.headers.row_map(row)
+
             for expr in expressions:
                 expr.eval(row_map, group_memo)
 

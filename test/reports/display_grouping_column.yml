@@ -1,0 +1,25 @@
+# Demonstrates outputting the results of grouping functions, along with the
+# value used to group them, which would be a frequent requirement of most reports
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+tables:
+  trading_days:
+    source: gappers
+    group:
+      - Date
+    per_group:
+      - as_var('all', count())
+      - as_var('big', count(Open >= 10))
+      - as_var('small', count(Open < 10))
+
+output:
+  tables:
+    - trading_days
+  columns:
+    - Date
+    - all
+    - big
+    - small
