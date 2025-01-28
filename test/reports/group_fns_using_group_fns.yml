@@ -1,0 +1,25 @@
+# Demonstrates grouped functions using the outputs of
+# other grouped functions as their parameters
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+tables:
+  trading_days:
+    source: gappers
+    group:
+      - Date
+    per_group:
+      - as_var('total', count())
+      - as_var('five', count(as_percent(High - Open, Open) > 5))
+      - as_var('five_percentage', round(as_percent(five, total), 1))
+
+output:
+  tables:
+    - trading_days
+  columns:
+    - Date
+    - total
+    - five
+    - five_percentage

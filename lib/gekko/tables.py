@@ -61,11 +61,12 @@ class Table:
 
         for row in group:
             row_map = self.headers.row_map(row)
+            row_map = row_map | group_memo
 
             for expr in expressions:
-                expr.eval(row_map, group_memo)
+                expr.eval(row_map)
 
-        self.__upsert(self.groups, path, lambda val: [group_memo])
+        self.__upsert(self.groups, path, lambda val: [row_map])
 
     def __load_data(self):
         if 'table' in self.config:
