@@ -5,17 +5,22 @@ from lib.gekko.view import View
 class Report:
     def __init__(self, definition):
         self.definition = definition
+        self.error = None
         self.sources = {}
         self.tables = {}
 
-        for source in definition['sources']:
-            tabledef = definition['sources'][source]
-            self.sources[source] = Source.from_definition(tabledef)
+        try:
+            for source in definition['sources']:
+                tabledef = definition['sources'][source]
+                self.sources[source] = Source.from_definition(tabledef)
 
-        for table in definition['tables']:
-            tabledef = definition['tables'][table]
-            self.tables[table] = Table(tabledef, self)
-            self.tables[table].evaluate()
+            for table in definition['tables']:
+                tabledef = definition['tables'][table]
+                self.tables[table] = Table(tabledef, self)
+                self.tables[table].evaluate()
+
+        except Exception as error:
+            self.error = error
 
     def get_source(self, name):
         return self.sources[name]

@@ -1,0 +1,14 @@
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+  multi:
+    csvfile: "test/fixtures/multi/multi1.csv"
+
+tables:
+  trading_days:
+    source:
+      - gappers
+      - multi
+output:
+  tables:
+    - trading_days

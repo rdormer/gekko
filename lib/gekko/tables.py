@@ -73,13 +73,13 @@ class Table:
             for table in self.config['table']:
                 table_obj = self.table(table)
                 table_obj.evaluate()
-                self.__set_headers_if(table_obj)
+                self.__set_or_validate_headers(table_obj, table)
                 self.__append(table_obj)
 
         if 'source' in self.config:
             for source in self.config['source']:
                 data = self.source(source)
-                self.__set_headers_if(data)
+                self.__set_or_validate_headers(data, source)
 
                 if 'group' in self.config:
                     data.each_row(self.__collect_groups)
@@ -94,9 +94,13 @@ class Table:
                 else:
                     self.__append_row(row, [], -1)
 
-    def __set_headers_if(self, srcobj):
-        if not self.headers and srcobj.headers:
-            self.headers = srcobj.headers
+    def __set_or_validate_headers(self, srcobj, name):
+        if self.headers:
+            if not self.headers.equal_to(srcobj.headers):
+                raise Exception(name + ": header mismatch")
+        else:
+            if srcobj.headers:
+                self.headers = srcobj.headers
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either

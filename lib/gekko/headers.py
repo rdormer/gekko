@@ -49,3 +49,6 @@ class HeaderSet:
 
     def to_text(self):
         ''.join(self.header_names[idx] + ',' for idx in headers)
+
+    def equal_to(self, other_headers):
+        return len(self.header_names) == len(other_headers.header_names)
