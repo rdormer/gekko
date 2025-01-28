@@ -1,0 +1,14 @@
+# Demonstrates usage of file globbing to
+# load a group of CSV files
+
+sources:
+  mergesource:
+    glob: test/fixtures/multi/*.csv
+
+tables:
+  alltogether:
+    source: mergesource
+
+output:
+  tables:
+    - alltogether

@@ -1,4 +1,5 @@
 from lib.gekko.headers import HeaderSet
+import glob
 import csv
 import os
 
@@ -11,9 +12,13 @@ class Source:
         if 'csvfile' in definition:
             return CSVSource(definition)
 
+        if 'glob' in definition:
+            return CSVSource(definition)
+
     def __init__(self, definition):
+        defaults = {'delimiter': ",", 'newline': "\n"}
+        self.definition = defaults | definition
         self.headers = HeaderSet(definition)
-        self.definition = definition
         self.rows = []
 
     # returns the *total* size of the set, not the number
@@ -39,25 +44,30 @@ class Source:
 class CSVSource(Source):
     def __init__(self, definition):
         super().__init__(definition)
-        defaults = {'delimiter': ",", 'newline': "\n"}
-        self.definition = defaults | self.definition
 
     def load_rows(self, start, length):
-        for fname in self.definition['csvfile']:
-            linebuf = []
-            with open(fname, newline=self.definition['newline']) as csvfile:
-                tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
-                for row in tablereader:
-                    linebuf.append(row)
+        if 'csvfile' in self.definition:
+            for fname in self.definition['csvfile']:
+                self.__load_csv(fname)
 
-            if self.headers.handle_headers(linebuf):
-                self.rows.extend(linebuf)
+        if 'glob' in self.definition:
+            filelist = glob.glob(self.definition['glob'])
+            for fname in filelist:
+                self.__load_csv(fname)
+
+    def __load_csv(self, fname):
+        linebuf = []
+        with open(fname, newline=self.definition['newline']) as csvfile:
+            tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
+            for row in tablereader:
+                linebuf.append(row)
+
+        if self.headers.handle_headers(linebuf):
+            self.rows.extend(linebuf)
 
 class CmdSource(Source):
     def __init__(self, definition):
         super().__init__(definition)
-        defaults = {'delimiter': ",", 'newline': "\n"}
-        self.definition = defaults | self.definition
 
     def load_rows(self, start, length):
         rawdata = os.popen(self.definition['command']).read().strip()

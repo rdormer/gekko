@@ -16,6 +16,8 @@ def wrap_config_keys(config):
         array_wrap_key(current, 'source')
         array_wrap_key(current, 'table')
 
+    array_wrap_key(config['output'], 'tables')
+
 def array_wrap_key(config, key):
     if key in config and type(config[key]) == str:
         config[key] = [ config[key] ]
