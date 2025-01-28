@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from lib.gekko.config import load_config
 from lib.gekko.report import Report
+from lib.gekko.view import View
 import argparse
 
 def parse_command_line():
@@ -11,10 +12,12 @@ def parse_command_line():
   )
 
   opts.add_argument("report", help="The report definition file to run")
+  opts.add_argument("-t", "--usetabs", action='store_true')
   return opts.parse_args()
 
 args = parse_command_line()
 config = load_config(args.report)
+view = View(config, args)
 report = Report(config)
 
-print(report.text())
+print(view.text(report))

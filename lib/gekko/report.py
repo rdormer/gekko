@@ -4,8 +4,6 @@ from lib.gekko.view import View
 
 class Report:
     def __init__(self, definition):
-        defaults = {'headers': True}
-        definition['output'] = defaults | definition['output']
         self.definition = definition
         self.sources = {}
         self.tables = {}
@@ -24,9 +22,3 @@ class Report:
 
     def get_table(self, name):
         return self.tables[name]
-
-    def text(self):
-        viewobj = View(self.definition)
-        textbuf = viewobj.fmt_headers()
-        textbuf += viewobj.fmt_tables(self)
-        return textbuf
