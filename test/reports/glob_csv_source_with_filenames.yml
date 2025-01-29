@@ -1,0 +1,15 @@
+# Demonstrates a globbed CSV source that uses the file_column
+# key to add the source file name to each row of data
+
+sources:
+  mergesource:
+    glob: test/fixtures/multi/*.csv
+    file_column: filename
+
+tables:
+  alltogether:
+    source: mergesource
+
+output:
+  tables:
+    - alltogether

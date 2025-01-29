@@ -36,6 +36,10 @@ class HeaderSet:
 
     def handle_headers(self, lines):
         if not 'defcolumns' in self.definition:
+            if 'file_column' in self.definition:
+                lines[0].pop()
+                lines[0].append(self.definition['file_column'])
+
             if not self.header_names:
                 self.header_names = lines[0]
 

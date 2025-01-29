@@ -1,0 +1,18 @@
+# Demonstrates a multi file CSV source that uses the file_column
+# key to add the source file name to each row of data
+
+sources:
+  mergesource:
+    csvfile:
+      - test/fixtures/multi/multi-1.csv
+      - test/fixtures/multi/multi-2.csv
+      - test/fixtures/multi/multi-3.csv
+    file_column: filename
+
+tables:
+  alltogether:
+    source: mergesource
+
+output:
+  tables:
+    - alltogether

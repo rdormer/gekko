@@ -1,0 +1,10 @@
+Jane,Doe,23,test/fixtures/multi/multi-1.csv
+John,Doe,37,test/fixtures/multi/multi-1.csv
+Anonie,Mouse,99,test/fixtures/multi/multi-1.csv
+Stan,Smith,40,test/fixtures/multi/multi-2.csv
+Peter,Griffin,42,test/fixtures/multi/multi-2.csv
+Homer,Simpson,40,test/fixtures/multi/multi-2.csv
+Herbert,Hoover,101,test/fixtures/multi/multi-3.csv
+John,Kennedy,90,test/fixtures/multi/multi-3.csv
+Abraham,Lincoln,198,test/fixtures/multi/multi-3.csv
+

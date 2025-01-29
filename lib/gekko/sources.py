@@ -60,6 +60,9 @@ class CSVSource(Source):
         with open(fname, newline=self.definition['newline']) as csvfile:
             tablereader = csv.reader(csvfile, delimiter=self.definition['delimiter'])
             for row in tablereader:
+                if 'file_column' in self.definition:
+                    row.append(fname)
+
                 linebuf.append(row)
 
         if self.headers.handle_headers(linebuf):
