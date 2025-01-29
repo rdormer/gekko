@@ -90,12 +90,13 @@ class Table:
                     data.each_row(self.__append_row)
 
     def __append(self, srctable):
-        for group in srctable.data:
-            for row in srctable.data[group]:
-                if 'group' in self.config:
-                    self.__collect_groups(row, [], -1)
-                else:
-                    self.__append_row(row, [], -1)
+        def switch_on_row(row):
+            if 'group' in self.config:
+                self.__collect_groups(row, [], -1)
+            else:
+                self.__append_row(row, [], -1)
+
+        srctable.each_row(switch_on_row)
 
     def __set_or_validate_headers(self, srcobj, name):
         if self.headers:
