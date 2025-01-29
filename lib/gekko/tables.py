@@ -36,6 +36,9 @@ class Table:
         self.each_group(group_fn, data)
 
     def evaluate(self):
+        if self.data:
+            return
+
         if not 'group' in self.config:
             self.data[self.NO_GROUP_KEY] = []
 
