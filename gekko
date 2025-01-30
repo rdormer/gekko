@@ -13,11 +13,20 @@ def parse_command_line():
 
   opts.add_argument("report", help="The report definition file to run")
   opts.add_argument("-t", "--usetabs", action='store_true')
+  opts.add_argument("-v", "--verbose", action='store_true')
   return opts.parse_args()
 
-args = parse_command_line()
-config = load_config(args.report)
-view = View(config, args)
-report = Report(config)
+try:
+    args = parse_command_line()
+    config = load_config(args.report)
+    view = View(config, args)
+    report = Report(config)
 
-print(view.text(report))
+    print(view.text(report))
+
+except Exception as error:
+    if(args.verbose):
+        import traceback
+        print(traceback.format_exc())
+
+    print(error)

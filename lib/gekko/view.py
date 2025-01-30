@@ -6,11 +6,8 @@ class View:
         self.delimiter = "\t" if args.usetabs else ','
 
     def text(self, report):
-        if report.error:
-            textbuf = report.error
-        else:
-            textbuf = self.__fmt_headers()
-            textbuf += self.__fmt_tables(report)
+        textbuf = self.__fmt_headers()
+        textbuf += self.__fmt_tables(report)
 
         return textbuf
 
