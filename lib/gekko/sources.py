@@ -41,6 +41,9 @@ class Source:
     def __load_rows(self, start, length):
         pass
 
+    def get_headers(self):
+        return self.headers
+
 class CSVSource(Source):
     def __init__(self, definition):
         super().__init__(definition)

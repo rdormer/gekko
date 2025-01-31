@@ -1,4 +1,5 @@
 from lib.gekko.expression import Expression
+from lib.gekko.headers import HeaderSet
 
 class Table:
     NO_GROUP_KEY = '--none--'
@@ -12,7 +13,15 @@ class Table:
         self.data = {}
 
     def get_headers(self):
-        return self.headers
+        cols = self.config.get('columns')
+        rval = self.headers
+
+        if cols:
+            rval = HeaderSet(self.config)
+            line = [ cols ]
+            rval.handle_headers(line)
+
+        return rval
 
     def each_group(self, fn, data=None, path=None):
         data = data or self.data
@@ -91,6 +100,9 @@ class Table:
 
     def __append(self, srctable):
         def switch_on_row(row):
+            nonlocal srctable
+            row = srctable.__column_key_filtered_row(row)
+
             if 'group' in self.config:
                 self.__collect_groups(row, [], -1)
             else:
@@ -100,11 +112,11 @@ class Table:
 
     def __set_or_validate_headers(self, srcobj, name):
         if self.headers:
-            if not self.headers.equal_to(srcobj.headers):
+            if not self.headers.equal_to(srcobj.get_headers()):
                 raise Exception(name + ": header mismatch")
         else:
-            if srcobj.headers:
-                self.headers = srcobj.headers
+            if srcobj.get_headers():
+                self.headers = srcobj.get_headers()
 
     # Grouping method.  Takes each row, traverses down the groups map, creating
     # new keys as it goes along, until it gets to the last group, where it either
@@ -133,3 +145,9 @@ class Table:
 
         key = path[-1:][0]
         target[key] = val_fn(target.get(key))
+
+    def __column_key_filtered_row(self, row):
+        if self.config.get('columns'):
+            return self.headers.filter_tuple(row, self.config['columns'])
+        else:
+            return row
