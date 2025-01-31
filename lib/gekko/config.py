@@ -14,7 +14,7 @@ def wrap_config_keys(config):
     for table in config['tables']:
         current = config['tables'][table]
         array_wrap_key(current, 'sources')
-        array_wrap_key(current, 'table')
+        array_wrap_key(current, 'tables')
 
     array_wrap_key(config['output'], 'tables')
 

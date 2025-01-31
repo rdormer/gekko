@@ -78,8 +78,8 @@ class Table:
         self.__upsert(self.groups, path, lambda val: [new_row])
 
     def __load_data(self):
-        if 'table' in self.config:
-            for table in self.config['table']:
+        if 'tables' in self.config:
+            for table in self.config['tables']:
                 table_obj = self.table(table)
                 table_obj.evaluate()
                 self.__set_or_validate_headers(table_obj, table)

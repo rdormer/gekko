@@ -1,3 +1,6 @@
+# Demonstrates a table using another table as a data set
+# Also demonstrates that the tables key for a table is array wrapped
+
 sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
@@ -6,7 +9,7 @@ tables:
   source_table:
     sources: gappers
   test_table:
-    table: source_table
+    tables: source_table
 
 output:
   tables:
