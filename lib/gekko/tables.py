@@ -85,8 +85,8 @@ class Table:
                 self.__set_or_validate_headers(table_obj, table)
                 self.__append(table_obj)
 
-        if 'source' in self.config:
-            for source in self.config['source']:
+        if 'sources' in self.config:
+            for source in self.config['sources']:
                 data = self.source(source)
                 self.__set_or_validate_headers(data, source)
 

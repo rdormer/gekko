@@ -4,7 +4,7 @@ sources:
 
 tables:
   source_table:
-    source: gappers
+    sources: gappers
   test_table:
     table: source_table
 

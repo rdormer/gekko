@@ -7,7 +7,7 @@ sources:
 
 tables:
   alltogether:
-    source: mergesource
+    sources: mergesource
 
 output:
   tables:

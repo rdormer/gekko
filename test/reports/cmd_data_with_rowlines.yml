@@ -19,7 +19,7 @@ sources:
 
 tables:
   tradelist:
-    source: tsdata
+    sources: tsdata
 
 output:
   tables:

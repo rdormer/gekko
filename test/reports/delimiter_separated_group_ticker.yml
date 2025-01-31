@@ -8,7 +8,7 @@ sources:
 
 tables:
   pipes:
-    source: pipeseparated
+    sources: pipeseparated
     group:
       - Ticker
 

@@ -6,7 +6,7 @@ sources:
 
 tables:
   trading_days:
-    source:
+    sources:
       - gappers
       - multi
 output:

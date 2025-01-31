@@ -7,7 +7,7 @@ sources:
 
 tables:
   trading_days:
-    source: gappers
+    sources: gappers
     group:
       - Date
     per_group:
