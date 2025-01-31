@@ -69,7 +69,8 @@ class CSVSource(Source):
                 linebuf.append(row)
 
         if self.headers.handle_headers(linebuf):
-            self.rows.extend(linebuf)
+            mapped_lines = [self.headers.row_map(row) for row in linebuf]
+            self.rows.extend(mapped_lines)
 
 class CmdSource(Source):
     def __init__(self, definition):
@@ -82,11 +83,14 @@ class CmdSource(Source):
         if 'rowlines' in self.definition:
             rawdata = self.__concatenate_rows(rawdata, self.definition['rowlines'])
 
+        linebuf = []
         tablereader = csv.reader(rawdata, delimiter=self.definition['delimiter'])
         for row in tablereader:
-            self.rows.append(row)
+            linebuf.append(row)
 
-        self.headers.handle_headers(self.rows)
+        if self.headers.handle_headers(linebuf):
+            mapped_lines = [self.headers.row_map(row) for row in linebuf]
+            self.rows.extend(mapped_lines)
 
     def __concatenate_rows(self, rows, size):
         catlines = []

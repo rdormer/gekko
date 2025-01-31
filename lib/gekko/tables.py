@@ -60,25 +60,22 @@ class Table:
             self.each_group(self.__group_evaluate)
 
     def __row_evaluate(self, row):
-        header_vars = self.headers.row_map(row)
         for expr in self.config['per_row']:
-            changes = Expression(expr).eval(header_vars)
+            changes = Expression(expr).eval(row)
             for newcol in changes:
                 self.headers.add_column(newcol)
-                row.append(changes[newcol])
 
     def __group_evaluate(self, group, path):
         group_memo = dict(zip(self.config['group'], path))
         expressions = [ Expression(expr) for expr in self.config['per_group'] ]
 
         for row in group:
-            row_map = self.headers.row_map(row)
-            row_map = row_map | group_memo
+            new_row = row | group_memo
 
             for expr in expressions:
-                expr.eval(row_map)
+                expr.eval(new_row)
 
-        self.__upsert(self.groups, path, lambda val: [row_map])
+        self.__upsert(self.groups, path, lambda val: [new_row])
 
     def __load_data(self):
         if 'table' in self.config:
@@ -101,7 +98,9 @@ class Table:
     def __append(self, srctable):
         def switch_on_row(row):
             nonlocal srctable
-            row = srctable.__column_key_filtered_row(row)
+
+            if self.config.get('columns'):
+                row = [row[key] for key in self.config['columns']]
 
             if 'group' in self.config:
                 self.__collect_groups(row, [], -1)
@@ -123,8 +122,7 @@ class Table:
     # creates or appends to an array of the rows for that group
 
     def __collect_groups(self, row, headers, idx):
-        header_idxs = [headers.index(group) for group in self.config['group']]
-        path = [row[idx] for idx in header_idxs]
+        path = [row[group] for group in self.config['group']]
         appendrow = lambda value: [row] if value == None else value + [row]
         self.__upsert(self.data, path, appendrow)
 
@@ -145,9 +143,3 @@ class Table:
 
         key = path[-1:][0]
         target[key] = val_fn(target.get(key))
-
-    def __column_key_filtered_row(self, row):
-        if self.config.get('columns'):
-            return self.headers.filter_tuple(row, self.config['columns'])
-        else:
-            return row

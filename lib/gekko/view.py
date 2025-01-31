@@ -8,7 +8,6 @@ class View:
     def text(self, report):
         textbuf = self.__fmt_headers()
         textbuf += self.__fmt_tables(report)
-
         return textbuf
 
     def __fmt_headers(self):
@@ -40,13 +39,9 @@ class View:
         return buffer
 
     def __row_format(self, row, headers, headers_to_print):
-        row_buffer = ''
-
-        if type(row) == list:
-            filtered = headers.filter_tuple(row, headers_to_print)
-            line = ''.join(str(x) + self.delimiter for x in filtered)
-        else:
+        if headers_to_print:
             line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
+        else:
+             line = ''.join(row[key] + self.delimiter for key in row)
 
-        row_buffer += line[:-1] + "\n"
-        return row_buffer
+        return line[:-1] + "\n"
