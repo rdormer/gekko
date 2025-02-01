@@ -5,6 +5,7 @@ class Table:
     NO_GROUP_KEY = '--none--'
 
     def __init__(self, config, report):
+        self.sortdir = config.get('desc', False)
         self.source = report.get_source
         self.table = report.get_table
         self.headers = None
@@ -30,7 +31,7 @@ class Table:
         if type(data) == list:
             fn(data, path)
         else:
-            for group in data:
+            for group in sorted(data, reverse=self.sortdir):
                 self.each_group(fn, data[group], path + [group])
 
     def each_row(self, row_fn, data=None):
