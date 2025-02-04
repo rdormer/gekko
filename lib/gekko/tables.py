@@ -32,7 +32,8 @@ class Table:
             fn(data, path)
         else:
             for group in sorted(data, reverse=self.sortdir):
-                self.each_group(fn, data[group], path + [group])
+                if len(data[group]) > 0:
+                    self.each_group(fn, data[group], path + [group])
 
     def each_row(self, row_fn, data=None):
         data = data or self.groups
@@ -57,6 +58,9 @@ class Table:
         if 'per_row' in self.config:
             self.each_row(self.__row_evaluate)
 
+        if 'row_filter' in self.config:
+            self.each_group(self.__filter_rows)
+
         if 'per_group' in self.config:
             self.each_group(self.__group_evaluate)
 
@@ -77,6 +81,16 @@ class Table:
                 expr.eval(new_row)
 
         self.__upsert(self.groups, path, lambda val: [new_row])
+
+    def __filter_rows(self, data, path):
+        def predicate(row):
+            for filter in self.config['row_filter']:
+                if Expression(filter).eval(row):
+                    return False
+
+            return True
+
+        data[:] = [x for x in data if predicate(x)]
 
     def __load_data(self):
         if 'tables' in self.config:

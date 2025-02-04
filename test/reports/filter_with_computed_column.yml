@@ -1,0 +1,24 @@
+# Demonstrates row filtering on a computed column
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+tables:
+  trading_days:
+    sources: gappers
+    group:
+      - Date
+    per_row:
+      - add_column('longmove', round(as_percent(High - Open, Open), 1))
+    row_filter:
+      - longmove < 15
+
+output:
+  tables:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - Open
+    - longmove
