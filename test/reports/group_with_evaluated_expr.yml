@@ -1,0 +1,21 @@
+# Demonstrates grouping with an expression beyond just a simple column reference
+
+sources:
+  tradelists:
+    glob: test/fixtures/backtest/*.csv
+    rename_columns:
+      Date/Time: timestamp
+
+tables:
+  backtest:
+    sources: tradelists
+    group:
+      - timestamp[:10]
+    per_group:
+      - as_var('total', count())
+
+output:
+  tables: backtest
+  columns:
+    - timestamp
+    - total

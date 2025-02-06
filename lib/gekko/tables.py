@@ -50,9 +50,6 @@ class Table:
         if self.data:
             return
 
-        if not 'group' in self.config:
-            self.data[self.NO_GROUP_KEY] = []
-
         self.__load_data()
 
         if 'per_row' in self.config:
@@ -93,6 +90,11 @@ class Table:
         data[:] = [x for x in data if predicate(x)]
 
     def __load_data(self):
+        if not 'group' in self.config:
+            self.data[self.NO_GROUP_KEY] = []
+        else:
+            self.group_expressions = [Expression(group) for group in self.config['group']]
+
         if 'tables' in self.config:
             for table in self.config['tables']:
                 table_obj = self.table(table)
@@ -137,7 +139,7 @@ class Table:
     # creates or appends to an array of the rows for that group
 
     def __collect_groups(self, row, headers, idx):
-        path = [row[group] for group in self.config['group']]
+        path = [group.eval(row) for group in self.group_expressions]
         appendrow = lambda value: [row] if value == None else value + [row]
         self.__upsert(self.data, path, appendrow)
 
