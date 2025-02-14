@@ -6,12 +6,15 @@ class Table:
 
     def __init__(self, config, report):
         self.sortdir = config.get('desc', False)
-        self.source = report.get_source
-        self.table = report.get_table
+
         self.headers = None
         self.config = config
         self.groups = {}
         self.data = {}
+
+        if report != None:
+            self.source = report.get_source
+            self.table = report.get_table
 
     def get_headers(self):
         cols = self.config.get('columns')
@@ -160,3 +163,17 @@ class Table:
 
         key = path[-1:][0]
         target[key] = val_fn(target.get(key))
+
+    def __sub__(self, other):
+        my_data = self.groups or self.data
+        their_data = other.groups or other.data
+        my_keys = set( [key for key in my_data] )
+        their_keys = set( [key for key in their_data] )
+
+        new_table = Table({}, None)
+        new_keys = my_keys - their_keys
+
+        for key in new_keys:
+            new_table.data[key] = self.data[key]
+
+        return new_table

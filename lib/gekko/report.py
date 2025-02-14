@@ -1,6 +1,6 @@
+from lib.gekko.expression import Expression
 from lib.gekko.sources import Source
 from lib.gekko.tables import Table
-from lib.gekko.view import View
 
 class Report:
     def __init__(self, definition):
@@ -22,3 +22,6 @@ class Report:
 
     def get_table(self, name):
         return self.tables[name]
+
+    def eval(self, expr):
+        return Expression(expr).eval(self.tables)

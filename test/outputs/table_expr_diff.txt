@@ -1,0 +1,7 @@
+Ticker,Description
+ATAI,ATAI Life Sciences N.V.
+KDLY,Kindly MD, Inc.
+LTBR,Lightbridge Corporation
+MSPR,MSP Recovery, Inc.
+SWTX,SpringWorks Therapeutics, Inc.
+

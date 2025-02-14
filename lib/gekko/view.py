@@ -7,8 +7,17 @@ class View:
 
     def text(self, report):
         textbuf = self.__fmt_headers()
+        textbuf += self.__table_expr(report)
         textbuf += self.__fmt_tables(report)
         return textbuf
+
+    def __table_expr(self, report):
+        if 'expression' in self.config:
+            columns = self.config.get('columns', None)
+            lvalue = report.eval(self.config['expression'])
+            return self.__text(lvalue, columns)
+        else:
+            return ''
 
     def __fmt_headers(self):
         textbuf = ''
@@ -21,9 +30,10 @@ class View:
 
     def __fmt_tables(self, report):
         textbuf = ''
-        for out in self.config['tables']:
-            table = report.get_table(out)
-            textbuf += self.__text(table, self.columns)
+        if 'tables' in self.config:
+            for out in self.config['tables']:
+                table = report.get_table(out)
+                textbuf += self.__text(table, self.columns)
 
         return textbuf
 
