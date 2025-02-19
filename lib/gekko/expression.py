@@ -1,3 +1,5 @@
+import datetime
+
 class Expression:
     def __init__(self, expression):
         self.expression = expression
@@ -6,6 +8,7 @@ class Expression:
         setattr(self, 'as_var', self.__as_var)
         setattr(self, 'add_column', self.__add_column)
         setattr(self, 'as_percent', self.__as_percent)
+        setattr(self, 'datetime', datetime)
         self.counter = 0
 
     def eval(self, symbols):
