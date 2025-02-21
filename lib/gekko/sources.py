@@ -71,6 +71,8 @@ class CSVSource(Source):
         if self.headers.handle_headers(linebuf):
             mapped_lines = [self.headers.row_map(row) for row in linebuf]
             self.rows.extend(mapped_lines)
+        else:
+            raise Exception(fname + ": failed handling headers")
 
 class CmdSource(Source):
     def __init__(self, definition):

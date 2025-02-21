@@ -26,12 +26,13 @@ class HeaderSet:
                 lines[0].pop()
                 lines[0].append(self.definition['file_column'])
 
+            lines[0] = self.__remap_columns(lines[0])
+
             if not self.header_names:
                 self.header_names = lines[0]
 
             if self.header_names == lines[0]:
                 del lines[0]
-                self.__remap_columns()
                 return True
             else:
                 return False
@@ -42,8 +43,10 @@ class HeaderSet:
     def equal_to(self, other_headers):
         return len(self.header_names) == len(other_headers.header_names)
 
-    def __remap_columns(self):
+    def __remap_columns(self, cols):
         if 'rename_columns' in self.definition:
             def rename_if(x):
                 return self.definition['rename_columns'][x] if x in self.definition['rename_columns'] else x
-            self.header_names = [rename_if(x) for x in self.header_names ]
+            return [rename_if(x) for x in cols ]
+        else:
+            return cols
