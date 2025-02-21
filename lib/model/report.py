@@ -1,6 +1,6 @@
-from lib.gekko.expression import Expression
-from lib.gekko.sources import Source
-from lib.gekko.tables import Table
+from lib.expr.expression import Expression
+from lib.model.sources import Source
+from lib.model.tables import Table
 
 class Report:
     def __init__(self, definition):

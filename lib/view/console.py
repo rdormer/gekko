@@ -1,4 +1,4 @@
-class View:
+class Console:
     def __init__(self, config, args):
         defaults = {'headers': True}
         self.config = defaults | config['output']

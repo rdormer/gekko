@@ -1,5 +1,5 @@
-from lib.gekko.expression import Expression
-from lib.gekko.headers import HeaderSet
+from lib.expr.expression import Expression
+from lib.model.headers import HeaderSet
 
 class Table:
     NO_GROUP_KEY = '--none--'
