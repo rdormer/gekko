@@ -8,14 +8,16 @@ class Expression:
         setattr(self, 'as_var', self.__as_var)
         setattr(self, 'add_column', self.__add_column)
         setattr(self, 'as_percent', self.__as_percent)
+        setattr(self, 'accumulate', self.__accumulate)
         setattr(self, 'datetime', datetime)
         self.counter = 0
 
-    def eval(self, symbols):
+    def eval(self, symbols, memo={}):
         for var in symbols:
             obj = self.__cast_type(symbols[var])
             setattr(self, var, obj)
 
+        self.memo = memo
         self.symbols = symbols
         return eval(self.expression, self.__dict__)
 
@@ -38,6 +40,14 @@ class Expression:
 
     def __as_percent(self, denom, numerator):
         return (denom / numerator) * 100.0
+
+    def __accumulate(self, name):
+        if not self.memo.get(self.expression, False):
+            self.memo[self.expression] = 0.0
+
+        current = float(self.symbols[name])
+        self.memo[self.expression] += current
+        return self.memo[self.expression]
 
     def __round(self, value, places=2):
         return str(round(value, places))

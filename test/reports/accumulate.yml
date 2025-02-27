@@ -1,0 +1,26 @@
+# Demonstrates the accumulate statement.  Since the backtest data sets
+# have the overall return listed per execution, the return is listed twice
+# per actual round trip trade, so to get the right total we have to half it
+
+sources:
+  tradelists:
+    glob: test/fixtures/backtest/*.csv
+    rename_columns:
+      Date/Time: timestamp
+      'Profit %': profit_percent
+
+tables:
+  backtest:
+    sources: tradelists
+    group:
+      - timestamp[:10]
+    per_row:
+     - add_column('Date', timestamp[:10])
+     - add_column('half_profit', profit_percent / 2)
+     - add_column('total return', accumulate('half_profit'))
+
+output:
+  tables: backtest
+  columns:
+    - timestamp
+    - total return

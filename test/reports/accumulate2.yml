@@ -1,0 +1,30 @@
+# Demonstrates the accumulate statement.  Since the backtest data sets
+# have the overall return listed per execution, the return is listed twice
+# per actual round trip trade, so we filter it with a logical expression
+# so that it only appears on exits
+
+sources:
+  tradelists:
+    glob: test/fixtures/backtest/*.csv
+    rename_columns:
+      Date/Time: timestamp
+      'Profit %': profit_percent
+
+tables:
+  backtest:
+    sources: tradelists
+    group:
+      - timestamp[:10]
+    per_row:
+     - add_column('Date', timestamp[:10])
+     - add_column('trade_profit_%', 0 if 'Entry' in Type else profit_percent)
+     - add_column('total return', accumulate('trade_profit_%'))
+
+output:
+  tables: backtest
+  columns:
+    - timestamp
+    - Type
+    - profit_percent
+    - trade_profit_%
+    - total return

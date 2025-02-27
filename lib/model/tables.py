@@ -41,11 +41,12 @@ class Table:
     def each_row(self, row_fn, data=None):
         data = data or self.groups
         data = data or self.data
+        memo = {}
 
         def group_fn(data, path):
-            nonlocal row_fn
+            nonlocal row_fn, memo
             for row in data:
-                row_fn(row)
+                row_fn(row, memo)
 
         self.each_group(group_fn, data)
 
@@ -64,9 +65,9 @@ class Table:
         if 'per_group' in self.config:
             self.each_group(self.__group_evaluate)
 
-    def __row_evaluate(self, row):
+    def __row_evaluate(self, row, memo):
         for expr in self.config['per_row']:
-            changes = Expression(expr).eval(row)
+            changes = Expression(expr).eval(row, memo)
             for newcol in changes:
                 self.headers.add_column(newcol)
 
@@ -116,7 +117,7 @@ class Table:
                     data.each_row(self.__append_row)
 
     def __append(self, srctable):
-        def switch_on_row(row):
+        def switch_on_row(row, memo):
             nonlocal srctable
 
             if self.config.get('columns'):

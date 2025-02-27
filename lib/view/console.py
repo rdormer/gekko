@@ -41,7 +41,7 @@ class Console:
         buffer = ''
         headers = table.get_headers()
 
-        def row_fmt(row):
+        def row_fmt(row, memo):
             nonlocal buffer
             buffer += self.__row_format(row, headers, headers_to_print)
 
