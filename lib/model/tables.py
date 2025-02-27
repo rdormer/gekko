@@ -9,7 +9,6 @@ class Table:
 
         self.headers = None
         self.config = config
-        self.groups = {}
         self.data = {}
 
         if report != None:
@@ -39,7 +38,6 @@ class Table:
                     self.each_group(fn, data[group], path + [group])
 
     def each_row(self, row_fn, data=None):
-        data = data or self.groups
         data = data or self.data
         memo = {}
 
@@ -63,7 +61,9 @@ class Table:
             self.each_group(self.__filter_rows)
 
         if 'per_group' in self.config:
+            self.groups = {}
             self.each_group(self.__group_evaluate)
+            self.data = self.groups
 
     def __row_evaluate(self, row, memo):
         for expr in self.config['per_row']:
@@ -166,8 +166,8 @@ class Table:
         target[key] = val_fn(target.get(key))
 
     def __sub__(self, other):
-        my_data = self.groups or self.data
-        their_data = other.groups or other.data
+        my_data = self.data
+        their_data = other.data
         my_keys = set( [key for key in my_data] )
         their_keys = set( [key for key in their_data] )
 
