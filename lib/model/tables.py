@@ -72,7 +72,7 @@ class Table:
                 self.headers.add_column(newcol)
 
     def __group_evaluate(self, group, path):
-        group_memo = dict(zip(self.config['group'], path))
+        group_memo = dict(zip(self.config.get('group', self.NO_GROUP_KEY), path))
         expressions = [ Expression(expr) for expr in self.config['per_group'] ]
 
         for row in group:
