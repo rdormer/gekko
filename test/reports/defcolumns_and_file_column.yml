@@ -1,0 +1,21 @@
+# Demonstrates usage of file_column and defcolumns
+# statements in the same source definition
+
+sources:
+  bardata:
+    csvfile: test/fixtures/bardata_no_headers.csv
+    defcolumns:
+      - epoch
+      - open
+      - high
+      - low
+      - close
+      - volume
+    file_column: filename
+
+tables:
+  bartable:
+    sources: bardata
+
+output:
+  tables: bartable

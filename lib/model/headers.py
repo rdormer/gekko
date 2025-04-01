@@ -20,6 +20,8 @@ class HeaderSet:
     def handle_headers(self, lines):
         if 'defcolumns' in self.definition:
             self.header_names = self.definition['defcolumns']
+            if 'file_column' in self.definition:
+                self.header_names.append(self.definition['file_column'])
             return True
         else:
             if 'file_column' in self.definition:
