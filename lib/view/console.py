@@ -52,6 +52,6 @@ class Console:
         if headers_to_print:
             line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
         else:
-             line = ''.join(row[key] + self.delimiter for key in row)
+             line = ''.join(str(row[key]) + self.delimiter for key in row)
 
         return line[:-1] + "\n"

@@ -16,6 +16,7 @@ class Expression:
         for var in symbols:
             obj = self.__cast_type(symbols[var])
             setattr(self, var, obj)
+            symbols[var] = obj
 
         self.memo = memo
         self.symbols = symbols
@@ -29,9 +30,12 @@ class Expression:
         value = value.replace('%', '')
 
         try:
-            return float(value)
+            return int(value)
         except:
-            return value
+            try:
+                return float(value)
+            except:
+                return value
 
     def __add_column(self, name, value):
         if not name in self.symbols:
