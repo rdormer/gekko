@@ -1,0 +1,24 @@
+# Demonstrates that the round expression method can
+# take an optional places parameter
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+schemas:
+  trading_days:
+    sources: gappers
+    each_row:
+      - add_column('longmove', round(as_percent(High - Open, Open), 4))
+    template:
+      Date:
+        - '*'
+
+output:
+  schemas:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - Long Move
+    - longmove

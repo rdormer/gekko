@@ -1,0 +1,18 @@
+# Demonstrates the columns option for the output section of a report
+# in the casea where no grouping is specified
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+schemas:
+  trading_days:
+    sources: gappers
+
+output:
+  schemas:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - Description

@@ -9,6 +9,7 @@ class Console:
         textbuf = self.__fmt_headers()
         textbuf += self.__table_expr(report)
         textbuf += self.__fmt_tables(report)
+        textbuf += self.__fmt_schemas(report)
         return textbuf
 
     def __table_expr(self, report):
@@ -37,6 +38,15 @@ class Console:
 
         return textbuf
 
+    def __fmt_schemas(self, report):
+        textbuf = ''
+        if 'schemas' in self.config:
+            for out in self.config['schemas']:
+                table = report.get_schema(out)
+                textbuf += self.__text(table, self.columns)
+
+        return textbuf
+
     def __text(self, table, headers_to_print):
         buffer = ''
         headers = table.get_headers()
@@ -49,9 +59,15 @@ class Console:
         return buffer
 
     def __row_format(self, row, headers, headers_to_print):
-        if headers_to_print:
-            line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
+        if type(row) == dict:
+            if headers_to_print:
+                line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
+            else:
+                 line = ''.join(str(row[key]) + self.delimiter for key in row)
         else:
-             line = ''.join(str(row[key]) + self.delimiter for key in row)
+            if headers_to_print:
+                line = ''.join(str(row.col(key)) + self.delimiter for key in headers_to_print)
+            else:
+                 line = ''.join(str(row.col(key)) + self.delimiter for key in row.to_h())
 
         return line[:-1] + "\n"

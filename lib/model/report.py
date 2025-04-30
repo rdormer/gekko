@@ -6,7 +6,7 @@ from lib.model.schema import Schema
 class Report:
     def __init__(self, definition):
         self.definition = definition
-        self.schema = None
+        self.schemas = {}
         self.sources = {}
         self.tables = {}
 
@@ -20,17 +20,20 @@ class Report:
                 self.tables[table] = Table(tabledef, self)
                 self.tables[table].evaluate()
 
-        if 'schema' in definition:
-            schemadef = definition['schema']
-            self.schema = Schema(schemadef, self)
-            self.schema.evaluate()
-
+        if 'schemas' in definition:
+            for schema in definition['schemas']:
+                schemadef = definition['schemas'][schema]
+                self.schemas[schema] = Schema(schemadef, self)
+                self.schemas[schema].evaluate()
 
     def get_source(self, name):
         return self.sources[name]
 
     def get_table(self, name):
         return self.tables[name]
+
+    def get_schema(self, name):
+        return self.schemas[name]
 
     def eval(self, expr):
         return Expression(expr).eval(self.tables)

@@ -1,0 +1,20 @@
+# Demonstrates usage of the rename_columns option for sources
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+    rename_columns:
+      Symbol: Ticker
+      Description: FullName
+
+schemas:
+  trading_days:
+    sources: gappers
+
+output:
+  schemas:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - FullName

@@ -18,12 +18,14 @@ def wrap_config_keys(config):
             array_wrap_key(current, 'tables')
             array_wrap_key(current, 'row_filter')
 
-    if 'schema' in config:
-        current = config['schema']
-        array_wrap_key(current, 'sources')
-        array_wrap_key(current, 'each_row')
+    if 'schemas' in config:
+        for schema in config['schemas']:
+            current = config['schemas'][schema]
+            array_wrap_key(current, 'sources')
+            array_wrap_key(current, 'each_row')
 
     array_wrap_key(config['output'], 'tables')
+    array_wrap_key(config['output'], 'schemas')
 
 def array_wrap_key(config, key):
     if key in config and type(config[key]) == str:

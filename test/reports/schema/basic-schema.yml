@@ -1,0 +1,34 @@
+
+sources:
+  mergesource:
+    glob: test/fixtures/minutebars/AAOI*.csv
+    file_column: filename
+    defcolumns:
+      - timestamp
+      - open
+      - high
+      - low
+      - close
+      - volume
+
+schemas:
+  alltogether:
+    sources: mergesource
+    each_row:
+      - add_column('date', filename[30:40])
+      - add_column('ticker', filename[25:29])
+    template:
+      date:
+        ticker:
+          - '*'
+
+output:
+  schemas:
+    - alltogether
+  columns:
+    - date
+    - open
+    - high
+    - low
+    - close
+    - volume
