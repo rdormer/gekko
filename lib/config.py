@@ -11,11 +11,17 @@ def wrap_config_keys(config):
         current = config['sources'][src]
         array_wrap_key(current, 'csvfile')
 
-    for table in config['tables']:
-        current = config['tables'][table]
+    if 'tables' in config:
+        for table in config['tables']:
+            current = config['tables'][table]
+            array_wrap_key(current, 'sources')
+            array_wrap_key(current, 'tables')
+            array_wrap_key(current, 'row_filter')
+
+    if 'schema' in config:
+        current = config['schema']
         array_wrap_key(current, 'sources')
-        array_wrap_key(current, 'tables')
-        array_wrap_key(current, 'row_filter')
+        array_wrap_key(current, 'each_row')
 
     array_wrap_key(config['output'], 'tables')
 
