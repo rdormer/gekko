@@ -22,6 +22,9 @@ class Schema:
         if 'each_row' in self.config:
             self.each_row(self.__row_evaluate)
 
+        if 'row_filter' in self.config:
+            self.__filter_rows()
+
         if 'template' in self.config:
             self.__eval_template()
 
@@ -114,3 +117,14 @@ class Schema:
                     row_iter(fn, data[key])
 
         row_iter(fn, self.data)
+
+    def __filter_rows(self):
+        def predicate(row):
+            for filter in self.config['row_filter']:
+                if Expression(filter).eval(row.to_h()):
+                    return False
+
+            return True
+
+        filtered = [x for x in self.data if predicate(x)]
+        self.data = filtered

@@ -1,17 +1,20 @@
-# Demonstrates row filtering (in the absence of groups)
+# Demonstrates row filtering, and that row filtering works with groups
 
 sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
     row_filter:
       - Open < 50
+    template:
+      Date:
+        - '*'
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
     - Date

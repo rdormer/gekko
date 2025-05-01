@@ -4,18 +4,19 @@ sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    group:
-      - Date
-    per_row:
+    each_row:
       - add_column('longmove', round(as_percent(High - Open, Open), 1))
     row_filter:
       - longmove < 15
+    template:
+      Date:
+        - '*'
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
     - Date
