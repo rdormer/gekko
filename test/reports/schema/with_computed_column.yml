@@ -1,0 +1,24 @@
+# Demonstrates actual expression parsing with the per_row
+# option, as well as add_column, round, and as_percent
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+schemas:
+  trading_days:
+    sources: gappers
+    each_row:
+      - add_column('longmove', round(as_percent(High - Open, Open)))
+    template:
+      Date:
+        - '*'
+
+output:
+  schemas:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - Long Move
+    - longmove

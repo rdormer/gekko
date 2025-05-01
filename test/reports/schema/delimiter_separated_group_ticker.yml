@@ -1,0 +1,18 @@
+# Demonstrates the delimiter key to specify a delimiter character
+# for "CSV" sources
+
+sources:
+  pipeseparated:
+    csvfile: "test/fixtures/pipe_separated_values.csv"
+    delimiter: '|'
+
+schemas:
+  pipes:
+    sources: pipeseparated
+    template:
+      Ticker:
+        - '*'
+
+output:
+  schemas:
+    - pipes

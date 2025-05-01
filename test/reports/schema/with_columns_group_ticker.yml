@@ -1,0 +1,20 @@
+# Demonstrates the columns option for the output section of a report
+
+sources:
+  gappers:
+    csvfile: "test/fixtures/test_data_set_1.csv"
+
+schemas:
+  trading_days:
+    sources: gappers
+    template:
+      Ticker:
+        - '*'
+
+output:
+  schemas:
+    - trading_days
+  columns:
+    - Date
+    - Ticker
+    - Description

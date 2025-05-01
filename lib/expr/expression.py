@@ -22,6 +22,7 @@ class Expression:
         self.symbols = symbols
         return eval(self.expression, self.__dict__)
 
+    # TO DO: remove this once table is fully deprecated
     def __cast_type(self, value):
         if type(value) != str:
             return value

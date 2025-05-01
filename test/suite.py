@@ -1,10 +1,11 @@
 import pytest
+import glob
 import os
 
-reports = os.listdir('test/reports')
-
-for report in reports:
+files = glob.glob('test/reports/**/*.yml', recursive=True)
+for report in files:
     print(report)
-    testout = os.popen("./gekko test/reports/" + report).read()
-    correctout = os.popen("cat test/outputs/" + report[:-4] + ".txt").read()
+    testout = os.popen("./gekko " + report).read()
+    trueval = report.replace('reports', 'outputs').replace('.yml', '.txt')
+    correctout = os.popen("cat " + trueval).read()
     assert(testout == correctout)
