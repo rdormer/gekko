@@ -1,4 +1,4 @@
-# Demonstrates basic table expressions
+# Demonstrates basic schema expressions
 
 sources:
   today:
@@ -8,16 +8,17 @@ sources:
     csvfile:
       - test/fixtures/tableops/yesterday.csv
 
-tables:
+schemas:
   today_data:
     sources: today
-    group:
-      - Ticker
+    template:
+      Ticker:
+        - '*'
   yesterday_data:
     sources: yesterday
-    group:
-      - Ticker
-
+    template:
+      Ticker:
+        - '*'
 output:
   columns:
     - Ticker

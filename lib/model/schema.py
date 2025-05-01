@@ -128,3 +128,18 @@ class Schema:
 
         filtered = [x for x in self.data if predicate(x)]
         self.data = filtered
+
+    def __sub__(self, other):
+        my_data = self.data
+        their_data = other.data
+        my_keys = set( [key for key in my_data] )
+        their_keys = set( [key for key in their_data] )
+
+        new_schema = Schema({}, None)
+        new_schema.data = {}
+
+        new_keys = my_keys - their_keys
+        for key in new_keys:
+            new_schema.data[key] = self.data[key]
+
+        return new_schema

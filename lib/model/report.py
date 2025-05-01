@@ -36,4 +36,4 @@ class Report:
         return self.schemas[name]
 
     def eval(self, expr):
-        return Expression(expr).eval(self.tables)
+        return Expression(expr).eval(self.schemas)
