@@ -1,15 +1,18 @@
-# Demonstrates the descending sort option (default is ascending)
+# Demonstrates the descending sort option
 
 sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    group:
-      - Ticker
-    desc: true
+    template:
+      eval:
+        sort: desc
+      data:
+        Ticker:
+          - '*'
 
 output:
   tables:
