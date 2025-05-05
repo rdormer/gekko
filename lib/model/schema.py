@@ -113,7 +113,7 @@ class Schema:
                         row_iter(fn, entry)
 
             if type(data) == dict:
-                for key in data:
+                for key in sorted(data.keys()):
                     row_iter(fn, data[key])
 
         row_iter(fn, self.data)

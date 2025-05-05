@@ -1,7 +1,7 @@
 Ticker,Description
-MSPR,MSP Recovery Inc.
-LTBR,Lightbridge Corporation
 ATAI,ATAI Life Sciences N.V.
 KDLY,Kindly MD Inc.
+LTBR,Lightbridge Corporation
+MSPR,MSP Recovery Inc.
 SWTX,SpringWorks Therapeutics Inc.
 
