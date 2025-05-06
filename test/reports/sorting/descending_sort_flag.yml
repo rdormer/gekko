@@ -4,15 +4,18 @@ sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    group:
-      - Ticker
-    desc: true
+    template:
+      eval:
+        desc: true
+        data:
+          Ticker:
+            - '*'
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
     - Date

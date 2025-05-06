@@ -40,7 +40,23 @@ class Schema:
         return rval
 
     def __eval_template(self):
-        def expand_dict_template(template, data, rows):
+        def expand_eval_template(template, data, rows):
+            data['eval'] = dict(template['eval'])
+            data['eval']['data'] = {}
+            sub_template = template['eval']['data']
+            sortdir = template['eval'].get('desc', False)
+
+            if type(sub_template) == dict:
+                expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
+
+            if type(sub_template) == list:
+                raise 'array eval not implemented yet'
+
+        def expand_dict_template(template, data, rows, desc_sort=False):
+            if 'eval' in template:
+                expand_eval_template(template, data, rows)
+                return
+
             for template_key in template:
                 raw_data = {}
                 for row in rows:
@@ -48,7 +64,7 @@ class Schema:
                     raw_data.setdefault(row_key, [])
                     raw_data[row_key].append(row)
 
-                for key in sorted(raw_data.keys()):
+                for key in sorted(raw_data.keys(), reverse=desc_sort):
                     sub_template = template[template_key]
                     if type(sub_template) == dict:
                         data.setdefault(key, {})
