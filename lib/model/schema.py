@@ -40,41 +40,34 @@ class Schema:
         return rval
 
     def __eval_template(self):
+        def expand_dict_template(template, data, rows):
+            for template_key in template:
+                raw_data = {}
+                for row in rows:
+                    row_key = row.col(template_key)
+                    raw_data.setdefault(row_key, [])
+                    raw_data[row_key].append(row)
 
-        def go_down(row, template, data):
-            if type(template) == dict:
-                for key in template:
-                    subschema = template[key]
-                    datakey = row.col(key)
+                for key in sorted(raw_data.keys()):
+                    sub_template = template[template_key]
+                    if type(sub_template) == dict:
+                        data.setdefault(key, {})
+                        expand_dict_template(sub_template, data[key], raw_data[key])
 
-                    if datakey not in data:
-                        if type(subschema) == dict:
-                            data[datakey] = {}
-                        else:
-                            data[datakey] = []
+                    if type(sub_template) == list:
+                        data.setdefault(key, [])
+                        expand_list_template(sub_template, data[key], raw_data[key])
 
-                    go_down(row, subschema, data[datakey])
-
-            if type(template) == list:
+        def expand_list_template(template, data, rows):
+            for row in rows:
                 for item in template:
                     if item == '*':
                         data.append(row)
                     else:
                         raise 'subarray not implemented yet'
 
-        def expand_template(row, memo):
-            nonlocal template, new_data
-            go_down(row, template, new_data)
-
-        new_data = None
-        template = self.config['template']
-
-        if type(template) == dict:
-            new_data = {}
-        else:
-            new_data = []
-
-        self.each_row(expand_template)
+        new_data = {}
+        expand_dict_template(self.config['template'], new_data, self.data)
         self.data = new_data
 
     def __load_data(self):
@@ -102,7 +95,6 @@ class Schema:
                 self.headers.add_column(newcol)
 
     def each_row(self, fn):
-
         def row_iter(fn, data):
             memo = {}
             if type(data) == list:
@@ -113,7 +105,7 @@ class Schema:
                         row_iter(fn, entry)
 
             if type(data) == dict:
-                for key in sorted(data.keys()):
+                for key in data:
                     row_iter(fn, data[key])
 
         row_iter(fn, self.data)
@@ -139,7 +131,7 @@ class Schema:
         new_schema.data = {}
 
         new_keys = my_keys - their_keys
-        for key in new_keys:
+        for key in sorted(new_keys):
             new_schema.data[key] = self.data[key]
 
         return new_schema
