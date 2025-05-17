@@ -42,15 +42,24 @@ class Schema:
     def __eval_template(self):
         def expand_eval_template(template, data, rows):
             data['eval'] = dict(template['eval'])
-            data['eval']['data'] = {}
             sub_template = template['eval']['data']
             sortdir = template['eval'].get('desc', False)
 
             if type(sub_template) == dict:
+                data['eval']['data'] = {}
                 expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
 
             if type(sub_template) == list:
-                raise 'array eval not implemented yet'
+                data['eval']['data'] = []
+                expand_list_template(sub_template, data['eval']['data'], rows)
+
+            local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
+
+            for key in local_keys:
+                expr = Expression(data['eval'][key])
+
+                for row in rows:
+                    data['eval'][key] = expr.eval(row.to_h())
 
         def expand_dict_template(template, data, rows, desc_sort=False):
             if 'eval' in template:
