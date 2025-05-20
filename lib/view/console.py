@@ -43,7 +43,7 @@ class Console:
         if 'schemas' in self.config:
             for out in self.config['schemas']:
                 table = report.get_schema(out)
-                textbuf += self.__text(table, self.columns)
+                textbuf += self.__text2(table, self.columns)
 
         return textbuf
 
@@ -56,6 +56,17 @@ class Console:
             buffer += self.__row_format(row, headers, headers_to_print)
 
         table.each_row(row_fmt)
+        return buffer
+
+    def __text2(self, table, headers_to_print):
+        buffer = ''
+        headers = table.get_headers()
+
+        def row_fmt(row, memo):
+            nonlocal buffer
+            buffer += self.__row_format(row, headers, headers_to_print)
+
+        table.each_row(row_fmt, headers_to_print)
         return buffer
 
     def __row_format(self, row, headers, headers_to_print):

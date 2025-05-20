@@ -41,9 +41,9 @@ class Schema:
 
     def __eval_template(self):
         def expand_eval_template(template, data, rows):
-            data['eval'] = dict(template['eval'])
             sub_template = template['eval']['data']
             sortdir = template['eval'].get('desc', False)
+            data['eval'] = {}
 
             if type(sub_template) == dict:
                 data['eval']['data'] = {}
@@ -54,12 +54,15 @@ class Schema:
                 expand_list_template(sub_template, data['eval']['data'], rows)
 
             local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
+            local_data = {}
 
             for key in local_keys:
-                expr = Expression(data['eval'][key])
+                expr = Expression(template['eval'][key])
 
                 for row in rows:
-                    data['eval'][key] = expr.eval(row.to_h())
+                    local_data[key] = expr.eval(row.to_h())
+
+            data['eval']['meta'] = Row(local_data)
 
         def expand_dict_template(template, data, rows, desc_sort=False):
             if 'eval' in template:
@@ -119,19 +122,24 @@ class Schema:
             for newcol in changes:
                 self.headers.add_column(newcol)
 
-    def each_row(self, fn):
+    def each_row(self, fn, filter=None):
         def row_iter(fn, data):
             memo = {}
             if type(data) == list:
                 for entry in data:
                     if type(entry) == Row:
-                        fn(entry, memo)
+                        if filter == None or entry.has_cols(filter):
+                            fn(entry, memo)
                     if type(entry) == list:
                         row_iter(fn, entry)
 
             if type(data) == dict:
                 for key in data:
                     row_iter(fn, data[key])
+
+            if type(data) == Row:
+                if filter == None or data.has_cols(filter):
+                    fn(data, memo)
 
         row_iter(fn, self.data)
 

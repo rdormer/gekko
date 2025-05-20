@@ -1,20 +1,23 @@
-# Demonstrates basic usage of as_var and the count function
+# Demonstrates basic usage of eval variables and the count function
 # both filtered and unfiltered, and outputting of same
 
 sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    per_group:
-      - as_var('all', count())
-      - as_var('big', count(Open >= 10))
-      - as_var('small', count(Open < 10))
+    template:
+      eval:
+        all: count()
+        big: count(Open >= 10)
+        small: count(Open < 10)
+        data:
+          - '*'
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
     - all

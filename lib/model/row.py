@@ -10,6 +10,9 @@ class Row:
     def col(self, col):
         return self.data[col]
 
+    def has_cols(self, colset):
+        return set(self.data) & set(colset) == set(colset)
+
     def __cast_type(self, value):
         if type(value) != str:
             return value
