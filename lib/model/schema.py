@@ -41,17 +41,19 @@ class Schema:
 
     def __eval_template(self):
         def expand_eval_template(template, data, rows):
-            sub_template = template['eval']['data']
             sortdir = template['eval'].get('desc', False)
             data['eval'] = {}
 
-            if type(sub_template) == dict:
-                data['eval']['data'] = {}
-                expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
+            if 'data' in template['eval']:
+                sub_template = template['eval']['data']
 
-            if type(sub_template) == list:
-                data['eval']['data'] = []
-                expand_list_template(sub_template, data['eval']['data'], rows)
+                if type(sub_template) == dict:
+                    data['eval']['data'] = {}
+                    expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
+
+                if type(sub_template) == list:
+                    data['eval']['data'] = []
+                    expand_list_template(sub_template, data['eval']['data'], rows)
 
             local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
             local_data = {}
@@ -71,8 +73,10 @@ class Schema:
 
             for template_key in template:
                 raw_data = {}
+                row_exp = Expression(template_key)
+
                 for row in rows:
-                    row_key = row.col(template_key)
+                    row_key = row_exp.eval(row.to_h())
                     raw_data.setdefault(row_key, [])
                     raw_data[row_key].append(row)
 

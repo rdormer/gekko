@@ -1,4 +1,4 @@
-Date,all,big,small
+group_date,all,big,small
 1/10/2025,18,11,7
 1/13/2025,15,10,5
 1/14/2025,17,8,9

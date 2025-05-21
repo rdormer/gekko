@@ -5,21 +5,22 @@ sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    group:
-      - Date
-    per_group:
-      - as_var('all', count())
-      - as_var('big', count(Open >= 10))
-      - as_var('small', count(Open < 10))
+    template:
+      Date:
+        eval:
+          group_date: Date
+          all: count()
+          big: count(Open >= 10)
+          small: count(Open < 10)
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
-    - Date
+    - group_date
     - all
     - big
     - small

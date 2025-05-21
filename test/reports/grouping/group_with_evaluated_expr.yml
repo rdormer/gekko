@@ -6,16 +6,17 @@ sources:
     rename_columns:
       Date/Time: timestamp
 
-tables:
+schemas:
   backtest:
     sources: tradelists
-    group:
-      - timestamp[:10]
-    per_group:
-      - as_var('total', count())
+    template:
+      timestamp[:10]:
+        eval:
+          day: timestamp[:10]
+          total: count()
 
 output:
-  tables: backtest
+  schemas: backtest
   columns:
-    - timestamp
+    - day
     - total
