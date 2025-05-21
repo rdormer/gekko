@@ -40,67 +40,67 @@ class Schema:
         return rval
 
     def __eval_template(self):
-        def expand_eval_template(template, data, rows):
-            sortdir = template['eval'].get('desc', False)
-            data['eval'] = {}
+        new_data = {}
+        self.__expand_dict_template(self.config['template'], new_data, self.data)
+        self.data = new_data
 
-            if 'data' in template['eval']:
-                sub_template = template['eval']['data']
+    def __expand_eval_template(self, template, data, rows):
+        sortdir = template['eval'].get('desc', False)
+        data['eval'] = {}
 
+        if 'data' in template['eval']:
+            sub_template = template['eval']['data']
+
+            if type(sub_template) == dict:
+                data['eval']['data'] = {}
+                self.__expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
+
+            if type(sub_template) == list:
+                data['eval']['data'] = []
+                self.__expand_list_template(sub_template, data['eval']['data'], rows)
+
+        local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
+        local_data = {}
+
+        for key in local_keys:
+            expr = Expression(template['eval'][key])
+
+            for row in rows:
+                local_data[key] = expr.eval(row.to_h())
+
+        data['eval']['meta'] = Row(local_data)
+
+    def __expand_dict_template(self, template, data, rows, desc_sort=False):
+        if 'eval' in template:
+            self.__expand_eval_template(template, data, rows)
+            return
+
+        for template_key in template:
+            raw_data = {}
+            row_exp = Expression(template_key)
+
+            for row in rows:
+                row_key = row_exp.eval(row.to_h())
+                raw_data.setdefault(row_key, [])
+                raw_data[row_key].append(row)
+
+            for key in sorted(raw_data.keys(), reverse=desc_sort):
+                sub_template = template[template_key]
                 if type(sub_template) == dict:
-                    data['eval']['data'] = {}
-                    expand_dict_template(sub_template, data['eval']['data'], rows, sortdir)
+                    data.setdefault(key, {})
+                    self.__expand_dict_template(sub_template, data[key], raw_data[key])
 
                 if type(sub_template) == list:
-                    data['eval']['data'] = []
-                    expand_list_template(sub_template, data['eval']['data'], rows)
+                    data.setdefault(key, [])
+                    self.__expand_list_template(sub_template, data[key], raw_data[key])
 
-            local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
-            local_data = {}
-
-            for key in local_keys:
-                expr = Expression(template['eval'][key])
-
-                for row in rows:
-                    local_data[key] = expr.eval(row.to_h())
-
-            data['eval']['meta'] = Row(local_data)
-
-        def expand_dict_template(template, data, rows, desc_sort=False):
-            if 'eval' in template:
-                expand_eval_template(template, data, rows)
-                return
-
-            for template_key in template:
-                raw_data = {}
-                row_exp = Expression(template_key)
-
-                for row in rows:
-                    row_key = row_exp.eval(row.to_h())
-                    raw_data.setdefault(row_key, [])
-                    raw_data[row_key].append(row)
-
-                for key in sorted(raw_data.keys(), reverse=desc_sort):
-                    sub_template = template[template_key]
-                    if type(sub_template) == dict:
-                        data.setdefault(key, {})
-                        expand_dict_template(sub_template, data[key], raw_data[key])
-
-                    if type(sub_template) == list:
-                        data.setdefault(key, [])
-                        expand_list_template(sub_template, data[key], raw_data[key])
-
-        def expand_list_template(template, data, rows):
-            for row in rows:
-                for item in template:
-                    if item == '*':
-                        data.append(row)
-                    else:
-                        raise 'subarray not implemented yet'
-
-        new_data = {}
-        expand_dict_template(self.config['template'], new_data, self.data)
-        self.data = new_data
+    def __expand_list_template(self, template, data, rows):
+        for row in rows:
+            for item in template:
+                if item == '*':
+                    data.append(row)
+                else:
+                    raise 'subarray not implemented yet'
 
     def __load_data(self):
         if 'sources' in self.config:
