@@ -5,21 +5,22 @@ sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
 
-tables:
+schemas:
   trading_days:
     sources: gappers
-    group:
-      - Date
-    per_group:
-      - as_var('total', count())
-      - as_var('five', count(as_percent(High - Open, Open) > 5))
-      - as_var('five_percentage', round(as_percent(five, total), 1))
+    template:
+      Date:
+        eval:
+          group_date: Date
+          total: count()
+          five: count(as_percent(High - Open, Open) > 5)
+          five_percentage: round(as_percent(five, total), 1)
 
 output:
-  tables:
+  schemas:
     - trading_days
   columns:
-    - Date
+    - group_date
     - total
     - five
     - five_percentage

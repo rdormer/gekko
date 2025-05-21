@@ -66,7 +66,7 @@ class Schema:
             expr = Expression(template['eval'][key])
 
             for row in rows:
-                local_data[key] = expr.eval(row.to_h())
+                local_data[key] = expr.eval(row.to_h() | local_data)
 
         data['eval']['meta'] = Row(local_data)
 

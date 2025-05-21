@@ -1,4 +1,4 @@
-Date,total,five,five_percentage
+group_date,total,five,five_percentage
 1/10/2025,18,8,44.4
 1/13/2025,15,8,53.3
 1/14/2025,17,15,88.2
