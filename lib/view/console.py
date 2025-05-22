@@ -8,7 +8,6 @@ class Console:
     def text(self, report):
         textbuf = self.__fmt_headers()
         textbuf += self.__table_expr(report)
-        textbuf += self.__fmt_tables(report)
         textbuf += self.__fmt_schemas(report)
         return textbuf
 
@@ -29,36 +28,16 @@ class Console:
 
         return textbuf
 
-    def __fmt_tables(self, report):
-        textbuf = ''
-        if 'tables' in self.config:
-            for out in self.config['tables']:
-                table = report.get_table(out)
-                textbuf += self.__text(table, self.columns)
-
-        return textbuf
-
     def __fmt_schemas(self, report):
         textbuf = ''
         if 'schemas' in self.config:
             for out in self.config['schemas']:
                 table = report.get_schema(out)
-                textbuf += self.__text2(table, self.columns)
+                textbuf += self.__text(table, self.columns)
 
         return textbuf
 
     def __text(self, table, headers_to_print):
-        buffer = ''
-        headers = table.get_headers()
-
-        def row_fmt(row, memo):
-            nonlocal buffer
-            buffer += self.__row_format(row, headers, headers_to_print)
-
-        table.each_row(row_fmt)
-        return buffer
-
-    def __text2(self, table, headers_to_print):
         buffer = ''
         headers = table.get_headers()
 
