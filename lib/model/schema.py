@@ -19,14 +19,14 @@ class Schema:
 
         self.__load_data()
 
+        if 'template' in self.config:
+            self.__eval_template()
+
         if 'each_row' in self.config:
             self.each_row(self.__row_evaluate)
 
         if 'row_filter' in self.config:
             self.__filter_rows()
-
-        if 'template' in self.config:
-            self.__eval_template()
 
     def get_headers(self):
         cols = self.config.get('columns')
@@ -127,8 +127,7 @@ class Schema:
                 self.headers.add_column(newcol)
 
     def each_row(self, fn, filter=None):
-        def row_iter(fn, data):
-            memo = {}
+        def row_iter(fn, data, memo):
             if type(data) == list:
                 for entry in data:
                     if type(entry) == Row:
@@ -139,24 +138,32 @@ class Schema:
 
             if type(data) == dict:
                 for key in data:
-                    row_iter(fn, data[key])
+                    row_iter(fn, data[key], memo)
 
             if type(data) == Row:
                 if filter == None or data.has_cols(filter):
                     fn(data, memo)
 
-        row_iter(fn, self.data)
+        row_iter(fn, self.data, {})
 
     def __filter_rows(self):
-        def predicate(row):
-            for filter in self.config['row_filter']:
-                if Expression(filter).eval(row.to_h()):
-                    return False
+        def filter(data):
+            if type(data) == dict:
+                for key in data:
+                    filter(data[key])
 
-            return True
+            if type(data) == list:
+                def predicate(row):
+                    for filter in self.config['row_filter']:
+                        if Expression(filter).eval(row.to_h()):
+                            return False
 
-        filtered = [x for x in self.data if predicate(x)]
-        self.data = filtered
+                    return True
+
+                filtered = [x for x in data if predicate(x)]
+                data[:] = filtered
+
+        filter(self.data)
 
     def __sub__(self, other):
         my_data = self.data

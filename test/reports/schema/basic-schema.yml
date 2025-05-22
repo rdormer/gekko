@@ -18,8 +18,8 @@ schemas:
       - add_column('date', filename[30:40])
       - add_column('ticker', filename[25:29])
     template:
-      date:
-        ticker:
+      filename[30:40]:
+        filename[25:29]:
           - '*'
 
 output:

@@ -9,18 +9,19 @@ sources:
       Date/Time: timestamp
       'Profit %': profit_percent
 
-tables:
+schemas:
   backtest:
     sources: tradelists
-    group:
-      - timestamp[:10]
-    per_row:
+    each_row:
      - add_column('Date', timestamp[:10])
      - add_column('half_profit', profit_percent / 2)
      - add_column('total return', accumulate('half_profit'))
 
+    template:
+      timestamp[:10]:
+        - '*'
 output:
-  tables: backtest
+  schemas: backtest
   columns:
     - timestamp
     - total return
