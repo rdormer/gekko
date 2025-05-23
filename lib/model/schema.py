@@ -19,11 +19,16 @@ class Schema:
 
         self.__load_data()
 
+        if 'each_row' in self.config:
+            memo = {}
+            for row in self.data:
+                self.__row_evaluate(row, memo, 'each_row')
+
         if 'template' in self.config:
             self.__eval_template()
 
-        if 'each_row' in self.config:
-            self.each_row(self.__row_evaluate)
+        if 'after_grouping' in self.config:
+            self.each_row(lambda row, memo: self.__row_evaluate(row, memo, 'after_grouping'))
 
         if 'row_filter' in self.config:
             self.__filter_rows()
@@ -120,8 +125,8 @@ class Schema:
     def __load_row(self, row, headers, idx):
         self.data.append(Row(row))
 
-    def __row_evaluate(self, row, memo):
-        for expr in self.config['each_row']:
+    def __row_evaluate(self, row, memo, target):
+        for expr in self.config[target]:
             changes = Expression(expr).eval(row.to_h(), memo)
             for newcol in changes:
                 self.headers.add_column(newcol)

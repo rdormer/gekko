@@ -15,10 +15,11 @@ schemas:
     sources: tradelists
     each_row:
      - add_column('Date', timestamp[:10])
+    after_grouping:
      - add_column('trade_profit_%', 0 if 'Entry' in Type else profit_percent)
      - add_column('total return', accumulate('trade_profit_%'))
     template:
-      timestamp[:10]:
+      Date:
         - '*'
 
 output:

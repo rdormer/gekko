@@ -14,11 +14,11 @@ schemas:
     sources: tradelists
     each_row:
      - add_column('Date', timestamp[:10])
+    after_grouping:
      - add_column('half_profit', profit_percent / 2)
      - add_column('total return', accumulate('half_profit'))
-
     template:
-      timestamp[:10]:
+      Date:
         - '*'
 output:
   schemas: backtest

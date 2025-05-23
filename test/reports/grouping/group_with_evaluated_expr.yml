@@ -9,10 +9,12 @@ sources:
 schemas:
   backtest:
     sources: tradelists
+    each_row:
+      - add_column('date', timestamp[:10])
     template:
-      timestamp[:10]:
+      date:
         eval:
-          day: timestamp[:10]
+          day: date
           total: count()
 
 output:
