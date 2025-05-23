@@ -8,6 +8,7 @@ class Expression:
         setattr(self, 'add_column', self.__add_column)
         setattr(self, 'as_percent', self.__as_percent)
         setattr(self, 'accumulate', self.__accumulate)
+        setattr(self, 'pluck', self.__pluck)
         setattr(self, 'datetime', datetime)
         self.counter = 0
 
@@ -43,3 +44,12 @@ class Expression:
         if filter:
             self.counter += 1
         return self.counter
+
+    def __pluck(self, index, col):
+        next_idx = self.memo.get('__idx', -1) + 1
+        self.memo['__idx'] = next_idx
+
+        if index == next_idx:
+            self.memo[self.expression] = self.symbols[col]
+
+        return self.memo[self.expression]

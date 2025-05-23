@@ -69,9 +69,10 @@ class Schema:
 
         for key in local_keys:
             expr = Expression(template['eval'][key])
+            memo = {}
 
             for row in rows:
-                local_data[key] = expr.eval(row.to_h() | local_data)
+                local_data[key] = expr.eval(row.to_h() | local_data, memo)
 
         data['eval']['meta'] = Row(local_data)
 
