@@ -1,4 +1,5 @@
 import datetime
+import re
 
 class Expression:
     def __init__(self, expression):
@@ -10,6 +11,7 @@ class Expression:
         setattr(self, 'accumulate', self.__accumulate)
         setattr(self, 'pluck', self.__pluck)
         setattr(self, 'datetime', datetime)
+        setattr(self, 're', re)
         self.counter = 0
 
     def eval(self, symbols, memo={}):
