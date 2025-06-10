@@ -51,16 +51,7 @@ class Schema:
         sortdir = template['eval'].get('desc', False)
         data = {}
 
-        if 'data' in template['eval']:
-            sub_template = template['eval']['data']
-
-            if type(sub_template) == dict:
-                data['data'] = self.__expand_dict_template(sub_template, rows, sortdir)
-
-            if type(sub_template) == list:
-                data['data'] = self.__expand_list_template(sub_template, rows)
-
-        local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc']]
+        local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc', 'slice']]
         local_data = {}
 
         for key in local_keys:
@@ -70,7 +61,20 @@ class Schema:
             for row in rows:
                 local_data[key] = expr.eval(row.to_h() | local_data, memo)
 
+        if 'slice' in template['eval']:
+            self.__slice_data(template['eval']['slice'], rows, local_data)
+
         data['meta'] = Row(local_data)
+
+        if 'data' in template['eval']:
+            sub_template = template['eval']['data']
+
+            if type(sub_template) == dict:
+                data['data'] = self.__expand_dict_template(sub_template, rows, sortdir)
+
+            if type(sub_template) == list:
+                data['data'] = self.__expand_list_template(sub_template, rows)
+
         return data
 
     def __expand_dict_template(self, template, rows, desc_sort=False):
@@ -108,6 +112,23 @@ class Schema:
                     raise 'subarray not implemented yet'
 
         return data
+
+    def __slice_data(self, exprs, data, locals):
+        self.headers.add_column('slice')
+        predicates = [Expression(expr) for expr in exprs]
+        slindex = 0
+
+        for row in data:
+            predflag = False
+            for predicate in predicates:
+                predflag = predicate.eval(row.to_h() | locals)
+                if not predflag:
+                    break
+
+            if predflag:
+                slindex += 1
+
+            row.to_h()['slice'] = slindex
 
     def __load_data(self):
         if 'sources' in self.config:
