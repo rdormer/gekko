@@ -24,14 +24,14 @@ class Schema:
             for row in self.data:
                 self.__row_evaluate(row, memo, 'each_row')
 
+        if 'row_filter' in self.config:
+            self.data[:] = self.__filter_rows(self.data, self.config['row_filter'])
+
         if 'template' in self.config:
             self.__eval_template()
 
         if 'after_grouping' in self.config:
             self.each_row(lambda row, memo: self.__row_evaluate(row, memo, 'after_grouping'))
-
-        if 'row_filter' in self.config:
-            self.__filter_rows()
 
     def get_headers(self):
         cols = self.config.get('columns')
@@ -51,7 +51,7 @@ class Schema:
         sortdir = template['eval'].get('desc', False)
         data = {}
 
-        local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc', 'slice']]
+        local_keys = [x for x in list(template['eval']) if x not in ['data', 'desc', 'slice', 'filter']]
         local_data = {}
 
         for key in local_keys:
@@ -60,6 +60,9 @@ class Schema:
 
             for row in rows:
                 local_data[key] = expr.eval(row.to_h() | local_data, memo)
+
+        if 'filter' in template['eval']:
+            rows = self.__filter_rows(rows, template['eval']['filter'])
 
         if 'slice' in template['eval']:
             self.__slice_data(template['eval']['slice'], rows, local_data)
@@ -174,7 +177,9 @@ class Schema:
 
         row_iter(fn, self.data, {})
 
-    def __filter_rows(self):
+    def __filter_rows(self, indata, filter_predicates):
+        filter_expressions = [Expression(exp) for exp in filter_predicates]
+
         def filter(data):
             if type(data) == dict:
                 for key in data:
@@ -182,16 +187,15 @@ class Schema:
 
             if type(data) == list:
                 def predicate(row):
-                    for filter in self.config['row_filter']:
-                        if Expression(filter).eval(row.to_h()):
+                    for filter in filter_expressions:
+                        if filter.eval(row.to_h()):
                             return False
 
                     return True
 
-                filtered = [x for x in data if predicate(x)]
-                data[:] = filtered
+                return [x for x in data if predicate(x)]
 
-        filter(self.data)
+        return filter(indata)
 
     def __sub__(self, other):
         my_data = self.data

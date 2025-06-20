@@ -1,0 +1,52 @@
+# demonstrates the tricky, poorly thought out slice_filter.
+# the filter statement on line 27 acts as a row filter for each slice, filtering out
+# the rows in the slice *before* any values are computed, which is why you can't use it to
+# filter on movelen or any of the other computed values. Essentially it's duplicating
+# row_filter for individual slices
+
+# TO DO: my brain was pudding here, this really needs to be revisited at some point...
+
+sources:
+  mergesource:
+    glob: test/fixtures/minutebars/*.csv
+    file_column: filename
+    defcolumns:
+      - timestamp
+      - open
+      - high
+      - low
+      - close
+      - volume
+
+schemas:
+  opening_prices:
+    sources: mergesource
+    each_row:
+      - add_column('date', re.findall(r'[0-9]+-[0-9]+-[0-9]+', filename)[0])
+      - add_column('ticker', re.findall(r'/([A-Z]+)-', filename)[0])
+    template:
+      date:
+        ticker:
+          eval:
+            day_open: pluck(0, 'open')
+            filter:
+              - count() > 8
+            slice:
+              - (low < day_open and close > day_open) or (high > day_open and close < day_open)
+            data:
+              slice:
+                eval:
+                  movelen: count()
+                  day: pluck(0, 'date')
+                  ticker: pluck(0, 'ticker')
+                  number: pluck(0, 'slice')
+                  data:
+                    - '*'
+
+output:
+  schemas: opening_prices
+  columns:
+    - day
+    - ticker
+    - movelen
+    - number

@@ -1,0 +1,42 @@
+sources:
+  mergesource:
+    glob: test/fixtures/minutebars/*.csv
+    file_column: filename
+    defcolumns:
+      - timestamp
+      - open
+      - high
+      - low
+      - close
+      - volume
+
+schemas:
+  opening_prices:
+    sources: mergesource
+    each_row:
+      - add_column('date', re.findall(r'[0-9]+-[0-9]+-[0-9]+', filename)[0])
+      - add_column('ticker', re.findall(r'/([A-Z]+)-', filename)[0])
+    template:
+      date:
+        ticker:
+          eval:
+            day_open: pluck(0, 'open')
+            slice:
+              - (low < day_open and close > day_open) or (high > day_open and close < day_open)
+            data:
+              slice:
+                eval:
+                  movelen: count()
+                  day: pluck(0, 'date')
+                  ticker: pluck(0, 'ticker')
+                  number: pluck(0, 'slice')
+                  data:
+                    - '*'
+
+output:
+  schemas: opening_prices
+  columns:
+    - day
+    - ticker
+    - movelen
+    - number
