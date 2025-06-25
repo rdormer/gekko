@@ -10,6 +10,7 @@ class Expression:
         setattr(self, 'as_percent', self.__as_percent)
         setattr(self, 'accumulate', self.__accumulate)
         setattr(self, 'pluck', self.__pluck)
+        setattr(self, 'crossover', self.__crossover)
         setattr(self, 'datetime', datetime)
         setattr(self, 're', re)
         self.counter = 0
@@ -55,3 +56,8 @@ class Expression:
             self.memo[self.expression] = self.symbols[col]
 
         return self.memo[self.expression]
+
+    def __crossover(self, value, target):
+        previous_value = self.memo.get(self.expression, value)
+        self.memo[self.expression] = value
+        return (previous_value <= target and value > target) or (previous_value >= target and value < target)
