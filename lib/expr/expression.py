@@ -4,12 +4,14 @@ import re
 class Expression:
     def __init__(self, expression):
         self.expression = expression
+        setattr(self, 'max', self.__max)
+        setattr(self, 'min', self.__min)
         setattr(self, 'round', self.__round)
         setattr(self, 'count', self.__count)
+        setattr(self, 'pluck', self.__pluck)
         setattr(self, 'add_column', self.__add_column)
         setattr(self, 'as_percent', self.__as_percent)
         setattr(self, 'accumulate', self.__accumulate)
-        setattr(self, 'pluck', self.__pluck)
         setattr(self, 'crossover', self.__crossover)
         setattr(self, 'datetime', datetime)
         setattr(self, 're', re)
@@ -33,8 +35,7 @@ class Expression:
         return (denom / numerator) * 100.0
 
     def __accumulate(self, name):
-        if not self.memo.get(self.expression, False):
-            self.memo[self.expression] = 0.0
+        self.__getset_memo_value(0.0)
 
         current = float(self.symbols[name])
         self.memo[self.expression] += current
@@ -57,7 +58,25 @@ class Expression:
 
         return self.memo[self.expression]
 
+    def __max(self, value):
+        self.__getset_memo_value(value)
+        if value > self.memo[self.expression]:
+            self.memo[self.expression] = value
+
+        return self.memo[self.expression]
+
+    def __min(self, value):
+        self.__getset_memo_value(value)
+        if value < self.memo[self.expression]:
+            self.memo[self.expression] = value
+
+        return self.memo[self.expression]
+
     def __crossover(self, value, target):
         previous_value = self.memo.get(self.expression, value)
         self.memo[self.expression] = value
         return (previous_value <= target and value > target) or (previous_value >= target and value < target)
+
+    def __getset_memo_value(self, value):
+        if not self.memo.get(self.expression, False):
+            self.memo[self.expression] = value
