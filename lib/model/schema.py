@@ -164,15 +164,16 @@ class Schema:
                     if type(entry) == Row:
                         if filter == None or entry.has_cols(filter):
                             fn(entry, memo)
-                    if type(entry) == list:
-                        row_iter(fn, entry)
 
             if type(data) == dict:
+                if 'meta' in data:
+                    memo = memo | data['meta'].to_h()
+
                 for key in data:
                     row_iter(fn, data[key], memo)
 
             if type(data) == Row:
-                if filter == None or data.has_cols(filter):
+                if filter == None or data.has_cols(filter, memo):
                     fn(data, memo)
 
         row_iter(fn, self.data, {})

@@ -43,21 +43,15 @@ class Console:
 
         def row_fmt(row, memo):
             nonlocal buffer
-            buffer += self.__row_format(row, headers, headers_to_print)
+            buffer += self.__row_format(row.to_h() | memo, headers, headers_to_print)
 
         table.each_row(row_fmt, headers_to_print)
         return buffer
 
     def __row_format(self, row, headers, headers_to_print):
-        if type(row) == dict:
-            if headers_to_print:
-                line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
-            else:
-                 line = ''.join(str(row[key]) + self.delimiter for key in row)
+        if headers_to_print:
+            line = ''.join(str(row[key]) + self.delimiter for key in headers_to_print)
         else:
-            if headers_to_print:
-                line = ''.join(str(row.col(key)) + self.delimiter for key in headers_to_print)
-            else:
-                 line = ''.join(str(row.col(key)) + self.delimiter for key in row.to_h())
+             line = ''.join(str(row[key]) + self.delimiter for key in row)
 
         return line[:-1] + "\n"
