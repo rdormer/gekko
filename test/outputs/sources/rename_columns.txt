@@ -1,4 +1,4 @@
-Date,Ticker,FullName
+Date,Symbol,FullName
 12/9/2024,COGT,Cogent Biosciences Inc.
 12/9/2024,REAL,The RealReal Inc.
 12/9/2024,SATL,Satellogic Inc.

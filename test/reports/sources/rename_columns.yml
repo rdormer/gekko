@@ -1,10 +1,12 @@
 # Demonstrates usage of the rename_columns option for sources
+# a rename_column option uses the key as the original name,
+# and the value as the new name for the column
 
 sources:
   gappers:
     csvfile: "test/fixtures/test_data_set_1.csv"
     rename_columns:
-      Symbol: Ticker
+      Ticker: Symbol
       Description: FullName
 
 schemas:
@@ -16,5 +18,5 @@ output:
     - trading_days
   columns:
     - Date
-    - Ticker
+    - Symbol
     - FullName
